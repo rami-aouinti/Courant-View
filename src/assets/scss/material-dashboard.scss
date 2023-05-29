@@ -1,0 +1,58 @@
+// =========================================================
+// * Vuetify Material Dashboard 2 PRO - v3.0.0
+// =========================================================
+
+// * Product Page:  https://www.creative-tim.com/product/vuetify-material-dashboard-pro
+// * Copyright 2022 Creative Tim (https://www.creative-tim.com)
+
+// Coded by www.creative-tim.com
+
+//  =========================================================
+
+// * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+
+// Variables
+@import "material-dashboard/variables";
+
+// Mixins
+@import "material-dashboard/mixins/placeholder";
+@import "material-dashboard/mixins/background";
+@import "material-dashboard/mixins/gradients";
+
+// Utilities
+@import "material-dashboard/utilities";
+
+// Nucleo Icons
+// @import "material-dashboard/nucleo-svg";
+@import "material-dashboard/nucleo";
+
+// Components
+@import "material-dashboard/drawer";
+@import "material-dashboard/misc";
+@import "material-dashboard/forms";
+@import "material-dashboard/buttons";
+@import "material-dashboard/app-bar";
+@import "material-dashboard/breadcrumbs";
+@import "material-dashboard/card";
+@import "material-dashboard/typography";
+@import "material-dashboard/checkbox";
+@import "material-dashboard/progress";
+@import "material-dashboard/avatar";
+@import "material-dashboard/media";
+@import "material-dashboard/table";
+@import "material-dashboard/header";
+@import "material-dashboard/separators";
+@import "material-dashboard/alerts";
+@import "material-dashboard/timeline";
+@import "material-dashboard/switch";
+@import "material-dashboard/pagination";
+@import "material-dashboard/select";
+
+// Vendors
+@import "material-dashboard/vendors/sweetalert2";
+@import "material-dashboard/vendors/fullcalendar";
+@import "material-dashboard/vendors/quill";
+@import "material-dashboard/vendors/dropzone";
+@import "material-dashboard/vendors/photoswipe";
+@import "material-dashboard/vendors/kanban";
