@@ -1,6 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import DashboardLayout from "../views/Layout/DashboardLayout.vue";
+import HomeLayout from "../views/Home/Layout/DashboardLayout.vue";
 import ProfileLayout from "../views/Layout/ProfileLayout.vue";
 import DashboardLayoutVr from "../views/Layout/DashboardLayoutVr.vue";
 import PageLayout from "../views/Layout/PageLayout";
@@ -8,7 +9,7 @@ import AuthBasicLayout from "../views/Layout/AuthBasicLayout";
 import LoginLayout from "../views/Authentication/layout/LoginLayout.vue";
 import AuthCoverLayout from "../views/Layout/AuthCoverLayout";
 import AuthIllustrationLayout from "../views/Layout/AuthIllustrationLayout";
-import Home from "../views/Home.vue";
+import Home from "../views/Home/Home.vue";
 import Register from "../views/Authentication/Register.vue";
 
 // Dashboard pages
@@ -335,22 +336,27 @@ let login = {
   ],
 };
 
+let home = {
+  path: "/",
+  component: HomeLayout,
+  name: "Home",
+  children: [
+    {
+      path: "/",
+      name: "Home",
+      component: Home,
+    },
+  ],
+};
+
 const routes = [
+  home,
   {
     path: "/",
     name: "Dashboard",
     redirect: "/pages/dashboards/analytics",
     component: DashboardLayout,
     children: [
-      {
-        path: "/",
-        name: "home",
-        component: Home,
-      },
-      {
-        path: "/home",
-        component: Home,
-      },
       {
         path: "/register",
         component: Register,
@@ -359,7 +365,7 @@ const routes = [
         path: "/profile",
         name: "profile",
         // lazy-loaded
-        component: () => import("../views/Profile.vue"),
+        component: () => import("../views/Home/Profile.vue"),
       },
       {
         path: "/admin",

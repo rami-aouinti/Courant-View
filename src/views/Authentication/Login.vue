@@ -184,7 +184,7 @@ export default {
   },
   created() {
     if (this.loggedIn) {
-      this.$router.push("/profile");
+      this.$router.push("/");
     }
   },
   methods: {
@@ -200,7 +200,7 @@ export default {
           this.$store.dispatch("auth/login", this.user).then(
             () => {
               this.$store.state.auth.user.username = this.user.username;
-              this.$router.push("/profile");
+              this.$router.push("/");
             },
             (error) => {
               this.loading = false;

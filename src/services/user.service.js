@@ -4,10 +4,6 @@ import authHeader from "./auth-header";
 const API_URL = "http://localhost/api/v1/";
 
 class UserService {
-  getPublicContent() {
-    return axios.get(API_URL + "all");
-  }
-
   getUserBoard() {
     return axios.get(API_URL + "user", { headers: authHeader() });
   }
@@ -18,6 +14,25 @@ class UserService {
 
   getAdminBoard() {
     return axios.get(API_URL + "admin", { headers: authHeader() });
+  }
+
+  getWebSiteTitel() {
+
+  }
+
+  getProfile() {
+    return axios.get(API_URL + "profile", { headers: authHeader() });
+  }
+
+  getMenu() {
+
+  }
+
+  getNotification() {
+
+  }
+  getSetting() {
+
   }
 }
 
