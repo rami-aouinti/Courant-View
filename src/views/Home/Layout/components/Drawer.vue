@@ -31,7 +31,7 @@
               v-else
             >
             </v-img>
-            <span class="ms-2 font-weight-bold text-sm">{{ title }}</span>
+            <span class="ms-2 font-weight-bold text-sm">{{ siteName }}</span>
           </div>
         </v-list-item-title>
       </v-list-item-content>
@@ -413,8 +413,6 @@
   </v-navigation-drawer>
 </template>
 <script>
-import UserService from "../../../../services/user.service";
-
 export default {
   name: "drawer",
   props: {
@@ -429,6 +427,10 @@ export default {
     sidebarTheme: {
       type: String,
       default: "dark",
+    },
+    siteName: {
+      type: String,
+      default: "Platform",
     },
   },
   data: () => ({
@@ -714,21 +716,7 @@ export default {
         ],
       },
     ],
-    title: "Platform",
   }),
-  mounted() {
-    UserService.getWebSiteTitel().then(
-      (response) => {
-        this.title = response.data;
-      },
-      (error) => {
-        this.content =
-          (error.response && error.response.data) ||
-          error.message ||
-          error.toString();
-      }
-    );
-  },
   methods: {
     listClose(event) {
       let items;

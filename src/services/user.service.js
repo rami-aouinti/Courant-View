@@ -16,23 +16,12 @@ class UserService {
     return axios.get(API_URL + "admin", { headers: authHeader() });
   }
 
-  getWebSiteTitel() {
-
-  }
-
   getProfile() {
     return axios.get(API_URL + "profile", { headers: authHeader() });
   }
 
-  getMenu() {
-
-  }
-
-  getNotification() {
-
-  }
   getSetting() {
-
+    return axios.get(API_URL + "setting", { headers: authHeader() });
   }
 }
 

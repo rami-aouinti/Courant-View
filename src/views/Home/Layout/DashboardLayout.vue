@@ -4,6 +4,7 @@
       :drawer="drawer"
       :sidebarColor="sidebarColor"
       :sidebarTheme="sidebarTheme"
+      :siteName="siteName"
     >
     </drawer>
     <v-main>
@@ -96,6 +97,7 @@ import Drawer from "@/views/Home/Layout/components/Drawer.vue";
 import AppBar from "@/views/Home/Layout/components/AppBar.vue";
 import ContentFooter from "@/views/Home/Layout/components/Footer.vue";
 import SettingsDrawer from "@/views/Home/Layout/components/SettingsDrawer.vue";
+import UserService from "@/services/user.service";
 
 export default {
   components: {
@@ -111,6 +113,7 @@ export default {
       showSettingsDrawer: false,
       sidebarColor: "success",
       sidebarTheme: "dark",
+      siteName: "Platform",
       navbarFixed: false,
     };
   },
@@ -142,6 +145,19 @@ export default {
     },
   },
   mounted() {
+    UserService.getSetting().then(
+      (response) => {
+        this.sidebarColor = response.data.sidebarColor;
+        this.sidebarTheme = response.data.sidebarTheme;
+        this.siteName = response.data.siteName;
+      },
+      (error) => {
+        this.content =
+          (error.response && error.response.data) ||
+          error.message ||
+          error.toString();
+      }
+    );
     this.initScrollbar();
   },
 };
