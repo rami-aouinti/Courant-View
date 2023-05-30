@@ -5,8 +5,11 @@ import ProfileLayout from "../views/Layout/ProfileLayout.vue";
 import DashboardLayoutVr from "../views/Layout/DashboardLayoutVr.vue";
 import PageLayout from "../views/Layout/PageLayout";
 import AuthBasicLayout from "../views/Layout/AuthBasicLayout";
+import LoginLayout from "../views/Authentication/layout/LoginLayout.vue";
 import AuthCoverLayout from "../views/Layout/AuthCoverLayout";
 import AuthIllustrationLayout from "../views/Layout/AuthIllustrationLayout";
+import Home from "../views/Home.vue";
+import Register from "../views/Authentication/Register.vue";
 
 // Dashboard pages
 const Dashboard = () => import("../views/Dashboard/Dashboard.vue");
@@ -94,6 +97,8 @@ const OrderDetails = () =>
   import(
     /* webpackChunkName: "pages" */ "@/views/Ecommerce/Orders/OrderDetails.vue"
   );
+
+const Login = () => import("@/views/Authentication/Login.vue");
 
 Vue.use(VueRouter);
 
@@ -317,6 +322,19 @@ let authIllustrationPages = {
   ],
 };
 
+let login = {
+  path: "/",
+  component: LoginLayout,
+  name: "Authentication Basic",
+  children: [
+    {
+      path: "/login",
+      name: "SignUpBasic",
+      component: Login,
+    },
+  ],
+};
+
 const routes = [
   {
     path: "/",
@@ -324,6 +342,43 @@ const routes = [
     redirect: "/pages/dashboards/analytics",
     component: DashboardLayout,
     children: [
+      {
+        path: "/",
+        name: "home",
+        component: Home,
+      },
+      {
+        path: "/home",
+        component: Home,
+      },
+      {
+        path: "/register",
+        component: Register,
+      },
+      {
+        path: "/profile",
+        name: "profile",
+        // lazy-loaded
+        component: () => import("../views/Profile.vue"),
+      },
+      {
+        path: "/admin",
+        name: "admin",
+        // lazy-loaded
+        component: () => import("../views/BoardAdmin.vue"),
+      },
+      {
+        path: "/mod",
+        name: "moderator",
+        // lazy-loaded
+        component: () => import("../views/BoardModerator.vue"),
+      },
+      {
+        path: "/user",
+        name: "user",
+        // lazy-loaded
+        component: () => import("../views/BoardUser.vue"),
+      },
       {
         path: "pages/dashboards/analytics",
         name: "Analytics",
@@ -464,6 +519,7 @@ const routes = [
   authBasicPages,
   authCoverPages,
   authIllustrationPages,
+  login,
 ];
 
 const router = new VueRouter({

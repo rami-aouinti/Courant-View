@@ -16,10 +16,27 @@ Coded by www.creative-tim.com
 import Vue from "vue";
 import App from "./App.vue";
 import router from "./router";
-import vuetify from "./plugins/vuetify";
-import DashboardPlugin from "./plugins/dashboard-plugin";
+import store from "./store";
+import "bootstrap";
+import "bootstrap/dist/css/bootstrap.min.css";
+import VeeValidate from "vee-validate";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import {
+  faHome,
+  faUser,
+  faUserPlus,
+  faSignInAlt,
+  faSignOutAlt,
+} from "@fortawesome/free-solid-svg-icons";
+
+library.add(faHome, faUser, faUserPlus, faSignInAlt, faSignOutAlt);
 
 Vue.config.productionTip = false;
+
+Vue.use(VeeValidate);
+
+import vuetify from "./plugins/vuetify";
+import DashboardPlugin from "./plugins/dashboard-plugin";
 
 // Photoswipe Gallery
 import Photoswipe from "vue-pswipe";
@@ -30,6 +47,7 @@ Vue.use(DashboardPlugin);
 
 new Vue({
   router,
+  store,
   vuetify,
   render: (h) => h(App),
 }).$mount("#app");
