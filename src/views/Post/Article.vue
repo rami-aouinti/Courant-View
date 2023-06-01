@@ -207,7 +207,7 @@
       </v-row>
       <v-row>
         <v-col lg="8" cols="12">
-          <v-card v-for="post in posts">
+          <v-card>
             <div class="border-bottom d-flex align-center px-4 py-4">
               <div class="d-flex align-center">
                 <a href="javascript:;" class="text-decoration-none">
@@ -246,12 +246,9 @@
               </div>
             </div>
             <div class="px-4 py-4">
-              <v-list-item :to="{ path: '/post', query: { id: post.id }}">
-                <h3>{{ post.title }}</h3>
-              </v-list-item>
-
+              <h3>{{ this.post.title }}</h3>
               <p class="mb-6 text-body font-weight-light">
-                {{ post.summary }}
+                {{ this.post.summary }}
               </p>
               <v-img
                 src="https://images.unsplash.com/photo-1578271887552-5ac3a72752bc?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1950&q=80"
@@ -664,13 +661,12 @@
     </v-card>
   </v-container>
 </template>
-
 <script>
-import HomeService from "@/services/home.service";
+import PostService from "@/services/home.service";
 
 export default {
-  name: "Home",
-  data() {
+  name: "Teams",
+  data: function () {
     return {
       stories: [
         {
@@ -823,21 +819,19 @@ export default {
           ],
         },
       ],
-      posts: [],
+      post: [],
     };
   },
-  computed: {
-    currentUser() {
-      return this.$store.state.auth.user;
+  methods: {
+    scrollToTop() {
+      window.scrollTo(0, 400);
     },
   },
   mounted() {
-    if (!this.currentUser) {
-      this.$router.push("/login");
-    }
-    HomeService.getPosts().then(
+    PostService.showPost(this.$route.query.id).then(
       (response) => {
-        this.posts = response.data.slice(0, 10);
+        this.post = response.data;
+        this.scrollToTop();
       },
       (error) => {
         this.content =

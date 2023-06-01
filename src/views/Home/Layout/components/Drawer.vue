@@ -56,7 +56,7 @@
 
           <v-list-item-content>
             <v-list-item-title class="ms-2 ps-1 font-weight-light">
-              Brooklyn Alice
+              {{ username }}
             </v-list-item-title>
           </v-list-item-content>
         </template>
@@ -413,6 +413,8 @@
   </v-navigation-drawer>
 </template>
 <script>
+import UserService from "@/services/user.service";
+
 export default {
   name: "drawer",
   props: {
@@ -436,6 +438,7 @@ export default {
   data: () => ({
     mini: false,
     togglerActive: false,
+    username: "",
     thirdLevelSimple: [
       "Third level menu",
       "Just another link",
@@ -717,6 +720,19 @@ export default {
       },
     ],
   }),
+  mounted() {
+    UserService.getProfile().then(
+      (response) => {
+        this.username = response.data.username;
+      },
+      (error) => {
+        this.content =
+          (error.response && error.response.data) ||
+          error.message ||
+          error.toString();
+      }
+    );
+  },
   methods: {
     listClose(event) {
       let items;

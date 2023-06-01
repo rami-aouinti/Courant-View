@@ -99,6 +99,7 @@ import ContentFooter from "@/views/Home/Layout/components/Footer.vue";
 import SettingsDrawer from "@/views/Home/Layout/components/SettingsDrawer.vue";
 import UserService from "@/services/user.service";
 
+
 export default {
   components: {
     ContentFooter,

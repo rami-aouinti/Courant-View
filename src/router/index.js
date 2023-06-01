@@ -15,6 +15,8 @@ import Register from "../views/Authentication/Register.vue";
 // Dashboard pages
 const Dashboard = () => import("../views/Dashboard/Dashboard.vue");
 const Discover = () => import("../views/Dashboard/Discover.vue");
+
+const Post = () => import("../views/Post/Article.vue");
 const Automotive = () => import("../views/Dashboard/Automotive.vue");
 const Sales = () => import("../views/Dashboard/Sales.vue");
 const SmartHome = () => import("../views/Dashboard/SmartHome.vue");
@@ -349,6 +351,19 @@ let home = {
   ],
 };
 
+let post = {
+  path: "/",
+  component: HomeLayout,
+  name: "Post",
+  children: [
+    {
+      path: "/post",
+      name: "Post",
+      component: Post,
+    },
+  ],
+};
+
 const routes = [
   home,
   {
@@ -526,6 +541,7 @@ const routes = [
   authCoverPages,
   authIllustrationPages,
   login,
+  post,
 ];
 
 const router = new VueRouter({
