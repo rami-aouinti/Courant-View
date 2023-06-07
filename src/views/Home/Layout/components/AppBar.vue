@@ -117,8 +117,8 @@
           :class="{ 'btn-dark-hover': !hasBg, 'btn-hover': hasBg }"
           class="text-body"
           :color="linkColor"
+          :to="loginPath"
           small
-          @click="$emit('toggleSettingsDrawer', true)"
         >
           <v-icon class="material-icons-round me-sm-1" size="20">
             account_circle
@@ -256,6 +256,7 @@ export default {
     return {
       drawer: false,
       togglerActive: false,
+      loginPath: "login",
       dropdown: [
         {
           icon: "email",

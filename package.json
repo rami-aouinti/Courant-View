@@ -9,6 +9,12 @@
     "dev": "npm run serve"
   },
   "dependencies": {
+    "@babel/compat-data": "^7.22.3",
+    "@babel/core": "^7.22.1",
+    "@babel/generator": "^7.22.3",
+    "@babel/helper-compilation-targets": "^7.22.1",
+    "@babel/helper-create-class-features-plugin": "^7.22.1",
+    "@babel/helper-module-transforms": "^7.22.1",
     "@fortawesome/fontawesome-svg-core": "^6.4.0",
     "@fortawesome/free-solid-svg-icons": "^6.4.0",
     "@fortawesome/vue-fontawesome": "^3.0.3",
