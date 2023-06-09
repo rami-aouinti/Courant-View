@@ -25,6 +25,17 @@ const VrInfo = () => import("../views/Dashboard/VrInfo.vue");
 const Crm = () => import("../views/Dashboard/Crm.vue");
 const GettingStarted = () => import("../views/Dashboard/GettingStarted.vue");
 
+const Quiz = () => import("../views/Quiz/Quiz.vue");
+const QuizManagement = () => import("../views/Admin/Quiz/List.vue");
+const ConfigurationManagement = () => import("../views/Admin/Quiz/Configuration.vue");
+const CategoryManagement = () => import("../views/Admin/Quiz/Category.vue");
+const AnswerManagement = () => import("../views/Admin/Quiz/Answer.vue");
+const QuestionManagement = () => import("../views/Admin/Quiz/Question.vue");
+const GroupManagement = () => import("../views/Admin/Quiz/Group.vue");
+const SchoolManagement = () => import("../views/Admin/Quiz/School.vue");
+
+const UserManagement = () => import("../views/Admin/User/List.vue");
+const UserGroupManagement = () => import("../views/Admin/UserGroup/List.vue");
 // Pages
 const Pricing = () =>
   import(/* webpackChunkName: "pages" */ "@/views/Pages/Pricing.vue");
@@ -104,6 +115,86 @@ const OrderDetails = () =>
 const Login = () => import("@/views/Authentication/Login.vue");
 
 Vue.use(VueRouter);
+
+let adminPages = {
+  path: "/",
+  component: HomeLayout,
+  name: "Admin",
+  children: [
+    {
+      path: "/admin/users",
+      name: "User Management",
+      component: UserManagement,
+      meta: {
+        groupName: "Admin",
+      },
+    },
+    {
+      path: "/admin/groups",
+      name: "User Group Management",
+      component: UserGroupManagement,
+      meta: {
+        groupName: "Admin",
+      },
+    },
+    {
+      path: "/admin/category",
+      name: "Quiz Management",
+      component: CategoryManagement,
+      meta: {
+        groupName: "Admin",
+      },
+    },
+    {
+      path: "/admin/configuration",
+      name: "Quiz Management",
+      component: ConfigurationManagement,
+      meta: {
+        groupName: "Admin",
+      },
+    },
+    {
+      path: "/admin/group",
+      name: "Quiz Management",
+      component: GroupManagement,
+      meta: {
+        groupName: "Admin",
+      },
+    },
+    {
+      path: "/admin/question",
+      name: "Quiz Management",
+      component: QuestionManagement,
+      meta: {
+        groupName: "Admin",
+      },
+    },
+    {
+      path: "/admin/answer",
+      name: "Quiz Management",
+      component: AnswerManagement,
+      meta: {
+        groupName: "Admin",
+      },
+    },
+    {
+      path: "/admin/school",
+      name: "Quiz Management",
+      component: SchoolManagement,
+      meta: {
+        groupName: "Admin",
+      },
+    },
+    {
+      path: "/admin/quiz",
+      name: "Quiz Management",
+      component: QuizManagement,
+      meta: {
+        groupName: "Admin",
+      },
+    },
+  ],
+};
 
 let vrPages = {
   path: "/",
@@ -364,8 +455,22 @@ let post = {
   ],
 };
 
+let quiz = {
+  path: "/quiz",
+  component: HomeLayout,
+  name: "Quiz",
+  children: [
+    {
+      path: "/quiz",
+      name: "Quiz",
+      component: Quiz,
+    },
+  ],
+};
+
 const routes = [
   home,
+  adminPages,
   {
     path: "/",
     name: "Dashboard",
@@ -542,6 +647,7 @@ const routes = [
   authIllustrationPages,
   login,
   post,
+  quiz,
 ];
 
 const router = new VueRouter({

@@ -668,8 +668,7 @@
 </template>
 
 <script>
-
-import HomeService from "@/services/home.service";
+import ArticleService from "@/services/article.service";
 export default {
   name: "Home",
   data() {
@@ -837,7 +836,7 @@ export default {
     if (!this.currentUser) {
       this.$router.push("/login");
     }
-    HomeService.getPosts().then(
+    ArticleService.getPosts().then(
       (response) => {
         this.posts = response.data.slice(0, 10);
       },

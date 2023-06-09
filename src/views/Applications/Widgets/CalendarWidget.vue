@@ -298,6 +298,7 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 
 import UserService from "@/services/user.service";
+import EventService from "@/services/event.service";
 
 export default {
   components: {
@@ -376,7 +377,7 @@ export default {
           textColor: "blue",
           description: this.model.description,
         };
-        UserService.addEvent(event).then(
+        EventService.addEvent(event).then(
           (response) => {
             console.log(response.data);
             this.calendarOptions.events.push(JSON.parse(JSON.stringify(event)));
@@ -409,7 +410,7 @@ export default {
       this.model.backgroundColor = "red";
       this.model.borderColor = "black";
       this.model.textColor = "blue";
-      UserService.updateEvent(this.model).then(
+      EventService.updateEvent(this.model).then(
         (response) => {
           console.log(response.data);
           if (index !== 1) {

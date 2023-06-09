@@ -662,7 +662,7 @@
   </v-container>
 </template>
 <script>
-import PostService from "@/services/home.service";
+import ArticleService from "@/services/article.service";
 
 export default {
   name: "Teams",
@@ -828,7 +828,7 @@ export default {
     },
   },
   mounted() {
-    PostService.showPost(this.$route.query.id).then(
+    ArticleService.showPost(this.$route.query.id).then(
       (response) => {
         this.post = response.data;
         this.scrollToTop();

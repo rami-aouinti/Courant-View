@@ -146,11 +146,11 @@ export default {
     },
   },
   mounted() {
-    UserService.getSetting().then(
+    UserService.getProfile().then(
       (response) => {
-        this.sidebarColor = response.data.sidebarColor;
-        this.sidebarTheme = response.data.sidebarTheme;
-        this.siteName = response.data.siteName;
+        this.sidebarColor = response.data.settings.sidebarColor;
+        this.sidebarTheme = response.data.settings.sidebarTheme;
+        this.siteName = response.data.settings.siteName;
       },
       (error) => {
         this.content =
