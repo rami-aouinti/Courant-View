@@ -117,40 +117,26 @@
           :class="{ 'btn-dark-hover': !hasBg, 'btn-hover': hasBg }"
           class="text-body"
           :color="linkColor"
-          :to="loginPath"
+          :to="messengerPath"
           small
         >
           <v-icon class="material-icons-round me-sm-1" size="20">
-            account_circle
+            email
           </v-icon>
         </v-btn>
 
         <v-btn
-          elevation="0"
+          icon
           :ripple="false"
-          height="43"
-          class="
-            font-weight-600
-            text-capitalize
-            drawer-toggler
-            py-3
-            px-0
-            rounded-sm
-          "
-          :class="{
-            'btn-dark-toggler-hover': !hasBg,
-            'btn-toggler-hover': hasBg,
-            active: togglerActive,
-          }"
-          v-if="$vuetify.breakpoint.mobile"
-          color="transparent"
-          @click="drawerClose"
+          :class="{ 'btn-dark-hover': !hasBg, 'btn-hover': hasBg }"
+          class="text-body"
+          :color="linkColor"
+          :to="eventPath"
+          small
         >
-          <div class="drawer-toggler-inner">
-            <i class="drawer-toggler-line text-body"></i>
-            <i class="drawer-toggler-line text-body"></i>
-            <i class="drawer-toggler-line text-body"></i>
-          </div>
+          <v-icon class="material-icons-round me-sm-1" size="20">
+            calendar_month
+          </v-icon>
         </v-btn>
 
         <v-btn
@@ -164,7 +150,68 @@
         >
           <v-icon class="material-icons-round" size="20"> settings </v-icon>
         </v-btn>
+        <v-menu
+          transition="slide-y-transition"
+          offset-y
+          offset-x
+          min-width="100"
+          max-width="200"
+        >
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              icon
+              :ripple="false"
+              :class="{ 'btn-dark-hover': !hasBg, 'btn-hover': hasBg }"
+              class="text-body"
+              :color="linkColor"
+              v-bind="attrs"
+              v-on="on"
+              small
+            >
+              <v-avatar size="20" class="my-3 ms-2">
+                <img :src="user.photo" alt="Brooklyn" />
+              </v-avatar>
+            </v-btn>
+          </template>
 
+          <v-list class="pa-3">
+            <v-list-item
+              v-for="(item, i) in account"
+              :key="i"
+              class="
+                pa-4
+                list-item-hover-active
+                d-flex
+                align-items-center
+                py-1
+                my-1
+                border-radius-md
+              "
+              :to="item.link"
+            >
+              <v-icon class="material-icons-round text-body" size="20">{{
+                item.icon
+              }}</v-icon>
+
+              <v-list-item-content class="pa-0">
+                <v-list-item-title
+                  class="text-body-2 ls-0 text-typo font-weight-600 mb-0"
+                >
+                  <v-row>
+                    <v-col>
+                      <h6
+                        class="text-sm font-weight-normal ms-2 text-typo"
+                        v-html="item.title"
+                      >
+                        {{ item.title }}
+                      </h6>
+                    </v-col>
+                  </v-row>
+                </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
+        </v-menu>
         <v-menu
           transition="slide-y-transition"
           offset-y
@@ -235,6 +282,33 @@
             </v-list-item>
           </v-list>
         </v-menu>
+        <v-btn
+          elevation="0"
+          :ripple="false"
+          height="43"
+          class="
+            font-weight-600
+            text-capitalize
+            drawer-toggler
+            py-3
+            px-0
+            rounded-sm
+          "
+          :class="{
+            'btn-dark-toggler-hover': !hasBg,
+            'btn-toggler-hover': hasBg,
+            active: togglerActive,
+          }"
+          v-if="$vuetify.breakpoint.mobile"
+          color="transparent"
+          @click="drawerClose"
+        >
+          <div class="drawer-toggler-inner">
+            <i class="drawer-toggler-line text-body"></i>
+            <i class="drawer-toggler-line text-body"></i>
+            <i class="drawer-toggler-line text-body"></i>
+          </div>
+        </v-btn>
       </v-col>
     </v-row>
   </v-app-bar>
@@ -251,24 +325,46 @@ export default {
       type: Boolean,
       default: false,
     },
+    user: [],
   },
   data() {
     return {
       drawer: false,
       togglerActive: false,
-      loginPath: "login",
+      loginPath: "/login",
+      messengerPath: "/messenger",
+      eventPath: "/event",
       dropdown: [
         {
           icon: "email",
           title: "Check new messages",
+          link: "/messages",
         },
         {
           icon: "podcasts",
           title: "Manage podcast session",
+          link: "",
         },
         {
           icon: "shopping_cart",
           title: "Payment successfully completed",
+        },
+      ],
+      account: [
+        {
+          icon: "person",
+          title: "Profile",
+          link: "/profile/overview",
+        },
+        {
+          icon: "manage_accounts",
+          title: "Setting",
+          link: "/account/settings",
+        },
+        {
+          icon: "person_off",
+          title: "Logout",
+          link: "/messages",
         },
       ],
     };

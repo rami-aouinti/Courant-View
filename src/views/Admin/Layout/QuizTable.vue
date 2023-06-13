@@ -86,27 +86,29 @@
                   <v-card-text class="card-padding">
                     <v-container class="px-0">
                       <v-row>
-                          <template v-for="(feld, index) in defaultItem">
-                              <v-col cols="6">
-                                  <v-text-field
-                                          v-model="editedItem[index]"
-                                          hide-details
-                                          class="
-                              input-style
-                              font-size-input
-                              text-light-input
-                              placeholder-light
-                              input-icon
-                            "
-                                          dense
-                                          flat
-                                          filled
-                                          solo
-                                          height="43"
-                                          :placeholder="index.charAt(0).toUpperCase() + index.slice(1)"
-                                  ></v-text-field>
-                              </v-col>
-                          </template>
+                        <template v-for="(feld, index) in defaultItem">
+                          <v-col cols="6">
+                            <v-text-field
+                              v-model="editedItem[index]"
+                              hide-details
+                              class="
+                                input-style
+                                font-size-input
+                                text-light-input
+                                placeholder-light
+                                input-icon
+                              "
+                              dense
+                              flat
+                              filled
+                              solo
+                              height="43"
+                              :placeholder="
+                                index.charAt(0).toUpperCase() + index.slice(1)
+                              "
+                            ></v-text-field>
+                          </v-col>
+                        </template>
                       </v-row>
                     </v-container>
                   </v-card-text>
@@ -315,10 +317,10 @@ export default {
       search: "",
       editedIndex: -1,
       editedItem: {},
-        defaultItem: {
-            'title': "",
-            'summary': "",
-        },
+      defaultItem: {
+        title: "",
+        summary: "",
+      },
       items: [],
       headers: [],
     };
@@ -337,20 +339,19 @@ export default {
     },
 
     deleteItemConfirm() {
-        var index = this.editedIndex;
-        AdminService.deleteItem(this.editedItem, this.formPath).then(
-            (response) => {
-                this.items.splice(index, 1);
-                this.closeDelete();
-            },
-            (error) => {
-                this.content =
-                    (error.response && error.response.data) ||
-                    error.message ||
-                    error.toString();
-            }
-        );
-
+      var index = this.editedIndex;
+      AdminService.deleteItem(this.editedItem, this.formPath).then(
+        (response) => {
+          this.items.splice(index, 1);
+          this.closeDelete();
+        },
+        (error) => {
+          this.content =
+            (error.response && error.response.data) ||
+            error.message ||
+            error.toString();
+        }
+      );
     },
 
     close() {
@@ -371,35 +372,31 @@ export default {
 
     save() {
       if (this.editedIndex > -1) {
-          var index = this.editedIndex;
-          AdminService.editItem(this.editedItem, this.formPath).then(
-              (response) => {
-
-                  Object.assign(this.items[index], response);
-              },
-              (error) => {
-                  this.content =
-                      (error.response && error.response.data) ||
-                      error.message ||
-                      error.toString();
-              }
-          );
-          Object.assign(this.items[this.editedIndex], this.editedItem);
-
+        var index = this.editedIndex;
+        AdminService.editItem(this.editedItem, this.formPath).then(
+          (response) => {
+            Object.assign(this.items[index], response);
+          },
+          (error) => {
+            this.content =
+              (error.response && error.response.data) ||
+              error.message ||
+              error.toString();
+          }
+        );
+        Object.assign(this.items[this.editedIndex], this.editedItem);
       } else {
-          console.log(this.editedItem);
-          AdminService.addItem(this.editedItem, this.formPath).then(
-              (response) => {
-                  this.items.push(response);
-              },
-              (error) => {
-                  this.content =
-                      (error.response && error.response.data) ||
-                      error.message ||
-                      error.toString();
-              }
-          );
-
+        AdminService.addItem(this.editedItem, this.formPath).then(
+          (response) => {
+            this.items.push(response);
+          },
+          (error) => {
+            this.content =
+              (error.response && error.response.data) ||
+              error.message ||
+              error.toString();
+          }
+        );
       }
       this.close();
     },
@@ -424,45 +421,41 @@ export default {
       val || this.closeDelete();
     },
   },
-    mounted() {
-        AdminService.getItems(this.formPath).then(
-            (response) => {
-                for (let [index, val] of response.data.entries()) {
-                    var listOfFeld = Object.keys(val);
-                }
+  mounted() {
+    AdminService.getItems(this.formPath).then(
+      (response) => {
+        for (let [index, val] of response.data.entries()) {
+          var listOfFeld = Object.keys(val);
+        }
 
-                for (let [index, val] of listOfFeld.entries()) {
-                    this.defaultItem[val] = "";
-                    this.editedItem[val] = "";
-                    this.headers.push(
-                        {
-                            text: val,
-                            align: "start",
-                            cellClass: "border-bottom",
-                            sortable: false,
-                            value: val,
-                            class:
-                                "text-secondary font-weight-bolder opacity-7 border-bottom ps-6",
-                        }
-                    )
-                }
-                this.headers.push(
-                    {
-                        text: "Actions",
-                        value: "actions",
-                        sortable: false,
-                        class: "text-secondary font-weight-bolder opacity-7",
-                    }
-                )
-                this.items = response.data;
-            },
-            (error) => {
-                this.content =
-                    (error.response && error.response.data) ||
-                    error.message ||
-                    error.toString();
-            }
-        );
-    },
+        for (let [index, val] of listOfFeld.entries()) {
+          this.defaultItem[val] = "";
+          this.editedItem[val] = "";
+          this.headers.push({
+            text: val,
+            align: "start",
+            cellClass: "border-bottom",
+            sortable: false,
+            value: val,
+            class:
+              "text-secondary font-weight-bolder opacity-7 border-bottom ps-6",
+          });
+        }
+        this.headers.push({
+          text: "Actions",
+          value: "actions",
+          sortable: false,
+          class: "text-secondary font-weight-bolder opacity-7",
+        });
+        this.items = response.data;
+      },
+      (error) => {
+        this.content =
+          (error.response && error.response.data) ||
+          error.message ||
+          error.toString();
+      }
+    );
+  },
 };
 </script>

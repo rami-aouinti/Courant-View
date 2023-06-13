@@ -2,7 +2,7 @@
   <v-container fluid class="py-6">
     <div
       class="
-        min-height-300
+        min-height-100
         border-radius-xl
         overflow-hidden
         position-relative

@@ -40,7 +40,7 @@
                     >{{ item.icon }}</v-icon
                   >
                   <v-list-item-content class="py-0">
-                    <a href="#profile" class="text-decoration-none">
+                    <a href="#account/profile" class="text-decoration-none">
                       <div class="d-flex flex-column">
                         <span class="text-dark text-sm">{{ item.text }}</span>
                       </div>
@@ -58,7 +58,7 @@
             <v-col cols="auto">
               <v-avatar width="74" height="74" class="shadow rounded-circle">
                 <img
-                  src="@/assets/img/bruce-mars.jpg"
+                  :src="this.user.photo"
                   alt="Avatar"
                   class="rounded-circle"
                 />
@@ -67,7 +67,7 @@
             <v-col cols="auto" class="my-auto">
               <div class="h-100">
                 <h5 class="mb-1 text-h5 text-typo font-weight-bold">
-                  Alec Thompson
+                  {{ this.user.username }}
                 </h5>
                 <p class="mb-0 font-weight-light text-body text-sm">
                   CEO / Co-Founder
@@ -121,6 +121,7 @@ import Accounts from "./Widgets/Accounts.vue";
 import Notifications from "./Widgets/Notifications.vue";
 import Sessions from "./Widgets/Sessions.vue";
 import DeleteAccount from "./Widgets/DeleteAccount.vue";
+import UserService from "@/services/user.service";
 
 export default {
   name: "Settings",
@@ -170,7 +171,22 @@ export default {
           text: "Delete Account",
         },
       ],
+      user: [],
     };
+  },
+  mounted() {
+    UserService.getProfile().then(
+      (response) => {
+        this.user = response.data;
+        this.user.photo = "http://localhost/uploads/avatars/" + this.user.photo;
+      },
+      (error) => {
+        this.content =
+          (error.response && error.response.data) ||
+          error.message ||
+          error.toString();
+      }
+    );
   },
 };
 </script>

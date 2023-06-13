@@ -5,6 +5,7 @@
       :sidebarColor="sidebarColor"
       :sidebarTheme="sidebarTheme"
       :siteName="siteName"
+      :user="user"
     >
     </drawer>
     <v-main>
@@ -14,20 +15,22 @@
         class="position-absolute drawer-state"
       ></div>
       <app-bar
-        v-if="$route.name != 'Profile'"
+        v-if="$route.name !== 'Profile'"
         background="bg-transparent"
         has-bg
         @drawer-toggle="drawer = $event"
         :toggle-active="drawer"
         :navbarFixed="navbarFixed"
         @toggleSettingsDrawer="toggleSettingsDrawer"
+        :user="user"
       ></app-bar>
       <app-bar
-        v-else-if="$route.name == 'Profile'"
+        v-else-if="$route.name === 'Profile'"
         background="bg-default"
         has-bg
         @drawer-toggle="drawer = $event"
         :toggle-active="drawer"
+        :user="user"
       ></app-bar>
       <app-bar
         v-else
@@ -35,6 +38,7 @@
         linkColor="rgba(0,0,0,.6)"
         @drawer-toggle="drawer = $event"
         :toggle-active="drawer"
+        :user="user"
       ></app-bar>
       <fade-transition :duration="200" origin="center top" mode="out-in">
         <!-- your content here -->
@@ -99,7 +103,6 @@ import ContentFooter from "@/views/Home/Layout/components/Footer.vue";
 import SettingsDrawer from "@/views/Home/Layout/components/SettingsDrawer.vue";
 import UserService from "@/services/user.service";
 
-
 export default {
   components: {
     ContentFooter,
@@ -116,6 +119,7 @@ export default {
       sidebarTheme: "dark",
       siteName: "Platform",
       navbarFixed: false,
+      user: [],
     };
   },
   methods: {
@@ -148,9 +152,11 @@ export default {
   mounted() {
     UserService.getProfile().then(
       (response) => {
-        this.sidebarColor = response.data.settings.sidebarColor;
-        this.sidebarTheme = response.data.settings.sidebarTheme;
-        this.siteName = response.data.settings.siteName;
+        this.user = response.data;
+        this.sidebarColor = this.user.setting.sidebarColor;
+        this.sidebarTheme = this.user.setting.sidebarTheme;
+        this.siteName = this.user.setting.siteName;
+        this.user.photo = "http://localhost/uploads/avatars/" + this.user.photo;
       },
       (error) => {
         this.content =

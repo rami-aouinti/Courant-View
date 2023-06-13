@@ -13,7 +13,7 @@
     :data-color="sidebarColor"
     :data-theme="sidebarTheme"
   >
-    <v-list-item class="pa-0">
+    <v-list-item class="pa-0" to="/">
       <v-list-item-content class="pa-0">
         <v-list-item-title class="title d-flex align-center mb-0">
           <div class="v-navigation-drawer-brand pa-5 d-flex align-center">
@@ -21,7 +21,7 @@
               src="@/assets/img/logo-ct-white.png"
               class="navbar-brand-img ms-3"
               width="32"
-              v-if="sidebarTheme == 'dark'"
+              v-if="sidebarTheme === 'dark'"
             >
             </v-img>
             <v-img
@@ -43,301 +43,223 @@
     />
 
     <v-list nav dense>
-        <v-list-group
-                :ripple="false"
-                append-icon="fas fa-angle-down"
-                class="pb-1 mx-2"
-                active-class="item-active"
+      <v-list-group
+        :ripple="false"
+        v-for="item in items"
+        :key="item.title"
+        v-model="item.active"
+        append-icon="fas fa-angle-down"
+        class="pb-1 mx-2"
+        active-class="item-active"
+      >
+        <template v-slot:activator>
+          <v-list-item-icon class="me-2 align-center">
+            <i class="material-icons-round opacity-10">{{ item.action }}</i>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title
+              v-text="item.title"
+              class="ms-1"
+            ></v-list-item-title>
+          </v-list-item-content>
+        </template>
+
+        <v-list-item
+          :ripple="false"
+          link
+          class="mb-1 no-default-hover px-0"
+          :class="child.items ? 'has-children' : ''"
+          v-for="child in item.items"
+          :key="child.title"
+          :to="child.link"
         >
-            <template v-slot:activator>
-                <v-avatar size="30" class="my-3 ms-2">
-                    <img src="@/assets/img/team-3.jpg" alt="Brooklyn" />
-                </v-avatar>
+          <div class="w-100 d-flex align-center pa-2 border-radius-lg">
+            <span class="v-list-item-mini" v-text="child.prefix"></span>
 
-                <v-list-item-content>
-                    <v-list-item-title class="ms-2 ps-1 font-weight-light">
-                        {{ username }}
-                    </v-list-item-title>
-                </v-list-item-content>
-            </template>
+            <v-list-item-content class="ms-6 ps-1" v-if="!child.items">
+              <v-list-item-title
+                v-text="child.title"
+                @click="listClose($event)"
+              ></v-list-item-title>
+            </v-list-item-content>
 
-            <v-list-item
-                    :ripple="false"
-                    link
-                    class="mb-1 no-default-hover py-2"
-                    v-for="child in userInfo"
-                    :key="child.title"
-            >
-          <span
-                  class="v-list-item-mini ms-0 font-weight-light text-center w-20"
-                  v-text="child.prefix"
-          ></span>
-
-                <v-list-item-content class="ms-2 ps-1" v-if="!child.items">
-                    <v-list-item-title v-text="child.title"></v-list-item-title>
-                </v-list-item-content>
-
-                <v-list-item-content class="ms-1 ps-1 py-0" v-if="child.items">
+            <v-list-item-content class="ms-6 ps-1 py-0" v-if="child.items">
+              <v-list-group
+                prepend-icon=""
+                :ripple="false"
+                sub-group
+                no-action
+                v-model="child.active"
+              >
+                <template v-slot:activator>
+                  <v-list nav dense class="pa-0">
                     <v-list-group
-                            prepend-icon=""
-                            :ripple="false"
-                            sub-group
-                            no-action
-                            v-model="child.active"
+                      :ripple="false"
+                      append-icon="fas fa-angle-down me-auto ms-1"
+                      active-class="item-active"
+                      class="mb-0"
                     >
-                        <template v-slot:activator>
-                            <v-list nav dense class="pa-0">
-                                <v-list-group
-                                        :ripple="false"
-                                        append-icon="fas fa-angle-down me-auto ms-1"
-                                        active-class="item-active"
-                                        class="mb-0"
-                                >
-                                    <template v-slot:activator class="mb-0">
-                                        <v-list-item-content class="py-0">
-                                            <v-list-item-title
-                                                    v-text="child.title"
-                                            ></v-list-item-title>
-                                        </v-list-item-content>
-                                    </template>
-                                </v-list-group>
-                            </v-list>
-                        </template>
-
-                        <v-list-item
-                                v-for="child2 in child.items"
-                                :ripple="false"
-                                :key="child2.title"
-                                :to="child2.link"
-                                @click="listClose($event)"
-                        >
-                            <span class="v-list-item-mini" v-text="child2.prefix"></span>
-                            <v-list-item-content>
-                                <v-list-item-title v-text="child2.title"></v-list-item-title>
-                            </v-list-item-content>
-                        </v-list-item>
+                      <template v-slot:activator class="mb-0">
+                        <v-list-item-content class="py-0">
+                          <v-list-item-title
+                            v-text="child.title"
+                          ></v-list-item-title>
+                        </v-list-item-content>
+                      </template>
                     </v-list-group>
-                </v-list-item-content>
-            </v-list-item>
-        </v-list-group>
-        <v-list-group
-                :ripple="false"
-                v-for="item in items"
-                :key="item.title"
-                v-model="item.active"
-                append-icon="fas fa-angle-down"
-                class="pb-1 mx-2"
-                active-class="item-active"
-        >
-            <template v-slot:activator>
-                <v-list-item-icon class="me-2 align-center">
-                    <i class="material-icons-round opacity-10">{{ item.action }}</i>
-                </v-list-item-icon>
-                <v-list-item-content>
+                  </v-list>
+                </template>
+
+                <v-list-item
+                  v-for="child2 in child.items"
+                  :ripple="false"
+                  :key="child2.title"
+                  :to="child2.link"
+                  @click="listClose($event)"
+                >
+                  <span class="v-list-item-mini" v-text="child2.prefix"></span>
+                  <v-list-item-content>
                     <v-list-item-title
-                            v-text="item.title"
-                            class="ms-1"
+                      v-text="child2.title"
                     ></v-list-item-title>
-                </v-list-item-content>
-            </template>
-
-            <v-list-item
-                    :ripple="false"
-                    link
-                    class="mb-1 no-default-hover px-0"
-                    :class="child.items ? 'has-children' : ''"
-                    v-for="child in item.items"
-                    :key="child.title"
-                    :to="child.link"
-            >
-                <div class="w-100 d-flex align-center pa-2 border-radius-lg">
-                    <span class="v-list-item-mini" v-text="child.prefix"></span>
-
-                    <v-list-item-content class="ms-6 ps-1" v-if="!child.items">
-                        <v-list-item-title
-                                v-text="child.title"
-                                @click="listClose($event)"
-                        ></v-list-item-title>
-                    </v-list-item-content>
-
-                    <v-list-item-content class="ms-6 ps-1 py-0" v-if="child.items">
-                        <v-list-group
-                                prepend-icon=""
-                                :ripple="false"
-                                sub-group
-                                no-action
-                                v-model="child.active"
-                        >
-                            <template v-slot:activator>
-                                <v-list nav dense class="pa-0">
-                                    <v-list-group
-                                            :ripple="false"
-                                            append-icon="fas fa-angle-down me-auto ms-1"
-                                            active-class="item-active"
-                                            class="mb-0"
-                                    >
-                                        <template v-slot:activator class="mb-0">
-                                            <v-list-item-content class="py-0">
-                                                <v-list-item-title
-                                                        v-text="child.title"
-                                                ></v-list-item-title>
-                                            </v-list-item-content>
-                                        </template>
-                                    </v-list-group>
-                                </v-list>
-                            </template>
-
-                            <v-list-item
-                                    v-for="child2 in child.items"
-                                    :ripple="false"
-                                    :key="child2.title"
-                                    :to="child2.link"
-                                    @click="listClose($event)"
-                            >
-                                <span class="v-list-item-mini" v-text="child2.prefix"></span>
-                                <v-list-item-content>
-                                    <v-list-item-title
-                                            v-text="child2.title"
-                                    ></v-list-item-title>
-                                </v-list-item-content>
-                            </v-list-item>
-                        </v-list-group>
-                    </v-list-item-content>
-                </div>
-            </v-list-item>
-        </v-list-group>
-
+                  </v-list-item-content>
+                </v-list-item>
+              </v-list-group>
+            </v-list-item-content>
+          </div>
+        </v-list-item>
+      </v-list-group>
     </v-list>
 
-      <h5
-              class="
-          text-uppercase text-caption
-          ls-0
-          font-weight-bolder
-          p-0
-          mx-4
-          mt-4
-          mb-2
-          ps-2
-          d-none-mini
-          white-space-nowrap
-        "
-              :class="sidebarTheme == 'dark' ? 'text-white' : 'text-default'"
-      >
-          Administration
-      </h5>
+    <h5
+      class="
+        text-uppercase text-caption
+        ls-0
+        font-weight-bolder
+        p-0
+        mx-4
+        mt-4
+        mb-2
+        ps-2
+        d-none-mini
+        white-space-nowrap
+      "
+      :class="sidebarTheme == 'dark' ? 'text-white' : 'text-default'"
+    >
+      Administration
+    </h5>
     <hr
       class="horizontal mb-3"
       :class="sidebarTheme == 'dark' ? 'light' : 'dark'"
     />
 
     <v-list nav dense>
-        <v-list-group
-                :ripple="false"
-                v-for="item in admins"
-                :key="item.title"
-                v-model="item.active"
-                append-icon="fas fa-angle-down"
-                class="pb-1 mx-2"
-                active-class="item-active"
+      <v-list-group
+        :ripple="false"
+        v-for="item in admins"
+        :key="item.title"
+        v-model="item.active"
+        append-icon="fas fa-angle-down"
+        class="pb-1 mx-2"
+        active-class="item-active"
+      >
+        <template v-slot:activator>
+          <v-list-item-icon class="me-2 align-center">
+            <i class="material-icons-round opacity-10">{{ item.action }}</i>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title
+              v-text="item.title"
+              class="ms-1"
+            ></v-list-item-title>
+          </v-list-item-content>
+        </template>
+
+        <v-list-item
+          :ripple="false"
+          link
+          class="mb-1 no-default-hover px-0"
+          :class="child.items ? 'has-children' : ''"
+          v-for="child in item.items"
+          :key="child.title"
+          :to="child.link"
         >
-            <template v-slot:activator>
-                <v-list-item-icon class="me-2 align-center">
-                    <i class="material-icons-round opacity-10">{{ item.action }}</i>
-                </v-list-item-icon>
-                <v-list-item-content>
-                    <v-list-item-title
-                            v-text="item.title"
-                            class="ms-1"
-                    ></v-list-item-title>
-                </v-list-item-content>
-            </template>
+          <v-list-item-content class="ps-4" v-if="!child.items">
+            <div class="d-flex align-items-center pa-2">
+              <span class="v-list-item-mini ms-0" v-text="child.prefix"></span>
+              <v-list-item-title
+                class="ms-6"
+                v-text="child.title"
+                @click="listClose($event)"
+              ></v-list-item-title>
+            </div>
+          </v-list-item-content>
 
-            <v-list-item
-                    :ripple="false"
-                    link
-                    class="mb-1 no-default-hover px-0"
-                    :class="child.items ? 'has-children' : ''"
-                    v-for="child in item.items"
-                    :key="child.title"
-                    :to="child.link"
+          <v-list-item-content class="py-0" v-if="child.items">
+            <v-list-group
+              prepend-icon=""
+              :ripple="false"
+              sub-group
+              no-action
+              v-model="child.active"
             >
-                <v-list-item-content class="ps-4" v-if="!child.items">
-                    <div class="d-flex align-items-center pa-2">
-                        <span class="v-list-item-mini ms-0" v-text="child.prefix"></span>
-                        <v-list-item-title
-                                class="ms-6"
-                                v-text="child.title"
-                                @click="listClose($event)"
-                        ></v-list-item-title>
-                    </div>
-                </v-list-item-content>
-
-                <v-list-item-content class="py-0" v-if="child.items">
-                    <v-list-group
-                            prepend-icon=""
-                            :ripple="false"
-                            sub-group
-                            no-action
-                            v-model="child.active"
-                    >
-                        <template v-slot:activator>
-                            <v-list nav dense class="py-2 ps-5 pe-2">
-                                <v-list-group
-                                        :ripple="false"
-                                        append-icon="fas fa-angle-down me-auto ms-1"
-                                        active-class="item-active"
-                                        class="mb-0"
-                                >
-                                    <template v-slot:activator class="mb-0">
-                                        <div class="w-100 d-flex align-center">
+              <template v-slot:activator>
+                <v-list nav dense class="py-2 ps-5 pe-2">
+                  <v-list-group
+                    :ripple="false"
+                    append-icon="fas fa-angle-down me-auto ms-1"
+                    active-class="item-active"
+                    class="mb-0"
+                  >
+                    <template v-slot:activator class="mb-0">
+                      <div class="w-100 d-flex align-center">
                         <span
-                                class="v-list-item-mini ms-1"
-                                v-text="child.prefix"
+                          class="v-list-item-mini ms-1"
+                          v-text="child.prefix"
                         ></span>
 
-                                            <v-list-item-content class="py-0 ms-4">
-                                                <v-list-item-title
-                                                        class="ms-2"
-                                                        v-text="child.title"
-                                                ></v-list-item-title>
-                                            </v-list-item-content>
-                                        </div>
-                                    </template>
-                                </v-list-group>
-                            </v-list>
-                        </template>
+                        <v-list-item-content class="py-0 ms-4">
+                          <v-list-item-title
+                            class="ms-2"
+                            v-text="child.title"
+                          ></v-list-item-title>
+                        </v-list-item-content>
+                      </div>
+                    </template>
+                  </v-list-group>
+                </v-list>
+              </template>
 
-                        <v-list-item
-                                v-for="child2 in child.items"
-                                :ripple="false"
-                                :key="child2.title"
-                                :to="child2.link"
-                                @click="listClose($event)"
-                                class="px-0"
-                        >
-                            <v-list-item-content>
-                                <div class="d-flex align-items-center pa-2">
+              <v-list-item
+                v-for="child2 in child.items"
+                :ripple="false"
+                :key="child2.title"
+                :to="child2.link"
+                @click="listClose($event)"
+                class="px-0"
+              >
+                <v-list-item-content>
+                  <div class="d-flex align-items-center pa-2">
                     <span
-                            class="v-list-item-mini"
-                            v-text="child2.prefix"
+                      class="v-list-item-mini"
+                      v-text="child2.prefix"
                     ></span>
-                                    <v-list-item-title
-                                            v-text="child2.title"
-                                            class="ms-6"
-                                    ></v-list-item-title>
-                                </div>
-                            </v-list-item-content>
-                        </v-list-item>
-                    </v-list-group>
+                    <v-list-item-title
+                      v-text="child2.title"
+                      class="ms-6"
+                    ></v-list-item-title>
+                  </div>
                 </v-list-item-content>
-            </v-list-item>
-        </v-list-group>
+              </v-list-item>
+            </v-list-group>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list-group>
 
-        <hr
-                class="horizontal my-4"
-                :class="sidebarTheme == 'dark' ? 'light' : 'dark'"
-        />
+      <hr
+        class="horizontal my-4"
+        :class="sidebarTheme == 'dark' ? 'light' : 'dark'"
+      />
 
       <h5
         class="
@@ -537,7 +459,6 @@
   </v-navigation-drawer>
 </template>
 <script>
-import UserService from "@/services/user.service";
 
 export default {
   name: "drawer",
@@ -558,6 +479,7 @@ export default {
       type: String,
       default: "Platform",
     },
+    user: [],
   },
   data: () => ({
     mini: false,
@@ -572,10 +494,12 @@ export default {
       {
         title: "My Profile",
         prefix: "MP",
+        link: "/profile/overview",
       },
       {
-        title: "Settings",
+        title: "Setting",
         prefix: "S",
+        link: "/account/settings",
       },
       {
         title: "Logout",
@@ -613,54 +537,54 @@ export default {
             prefix: "U",
             active: false,
             items: [
-                {
-                    title: "Users",
-                    prefix: "U",
-                    link: "/admin/users",
-                },
-                {
-                    title: "Groups",
-                    prefix: "U",
-                    link: "/admin/groups",
-                },
-            ]
+              {
+                title: "Users",
+                prefix: "U",
+                link: "/admin/users",
+              },
+              {
+                title: "Groups",
+                prefix: "U",
+                link: "/admin/groups",
+              },
+            ],
           },
           {
             title: "Quiz Management",
             prefix: "Q",
-              active: false,
-              items: [
-                  {
-                      title: "Configurations",
-                      prefix: "U",
-                      link: "/admin/configuration",
-                  },
-                  {
-                      title: "Categories",
-                      prefix: "U",
-                      link: "/admin/category",
-                  },
-                  {
-                      title: "Groups",
-                      prefix: "U",
-                      link: "/admin/group",
-                  },
-                  {
-                      title: "Questions",
-                      prefix: "U",
-                      link: "/admin/question",
-                  },
-                  {
-                      title: "Answers",
-                      prefix: "U",
-                      link: "/admin/answer",
-                  },
-                  {
-                      title: "Quiz",
-                      prefix: "U",
-                      link: "/admin/quiz",
-                  },
-              ],
+            active: false,
+            items: [
+              {
+                title: "Configurations",
+                prefix: "U",
+                link: "/admin/configuration",
+              },
+              {
+                title: "Categories",
+                prefix: "U",
+                link: "/admin/category",
+              },
+              {
+                title: "Groups",
+                prefix: "U",
+                link: "/admin/group",
+              },
+              {
+                title: "Questions",
+                prefix: "U",
+                link: "/admin/question",
+              },
+              {
+                title: "Answers",
+                prefix: "U",
+                link: "/admin/answer",
+              },
+              {
+                title: "Quiz",
+                prefix: "U",
+                link: "/admin/quiz",
+              },
+            ],
           },
         ],
       },
@@ -696,11 +620,11 @@ export default {
             prefix: "S",
             link: "/pages/dashboards/smart-home",
           },
-            {
-                title: "Quiz",
-                prefix: "Q",
-                link: "/quiz",
-            },
+          {
+            title: "Quiz",
+            prefix: "Q",
+            link: "/quiz",
+          },
         ],
       },
     ],
@@ -757,7 +681,7 @@ export default {
               {
                 title: "Settings",
                 prefix: "S",
-                link: "/pages/pages/account/settings",
+                link: "/account/settings",
               },
               {
                 title: "Billing",
@@ -912,19 +836,6 @@ export default {
       },
     ],
   }),
-  mounted() {
-    UserService.getProfile().then(
-      (response) => {
-        this.username = response.data.username;
-      },
-      (error) => {
-        this.content =
-          (error.response && error.response.data) ||
-          error.message ||
-          error.toString();
-      }
-    );
-  },
   methods: {
     listClose(event) {
       let items;

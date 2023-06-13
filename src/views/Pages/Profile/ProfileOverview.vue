@@ -1,12 +1,35 @@
 <template>
   <v-container fluid class="py-6">
     <v-row>
-      <v-col lg="4" md="6" cols="12" class="position-relative">
+      <v-col lg="4" sm="8">
+        <v-tabs background-color="transparent" class="text-left">
+          <v-tabs-slider></v-tabs-slider>
+
+          <v-tab :ripple="false" href="#tab-1">
+            <span class="ms-1">Messages</span>
+          </v-tab>
+
+          <v-tab :ripple="false" href="#tab-2">
+            <span class="ms-1">Social</span>
+          </v-tab>
+
+          <v-tab :ripple="false" href="#tab-3">
+            <span class="ms-1">Notifications</span>
+          </v-tab>
+
+          <v-tab :ripple="false" href="#tab-4">
+            <span class="ms-1">Backup</span>
+          </v-tab>
+        </v-tabs>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col lg="4" md="4" cols="4" class="position-relative">
         <v-card class="h-100">
-          <div class="pt-4">
+          <div class="px-4 pt-4">
             <h6 class="mb-0 text-h6 text-typo">Platform Settings</h6>
           </div>
-          <div class="py-4">
+          <div class="px-4 py-4">
             <h6 class="text-uppercase text-body text-xs font-weight-bolder">
               Account
             </h6>
@@ -63,7 +86,7 @@
         </v-card>
         <hr class="vertical dark" />
       </v-col>
-      <v-col lg="4" md="6" cols="12" class="position-relative">
+      <v-col lg="4" md="4" cols="4" class="position-relative">
         <v-card class="h-100">
           <div class="px-4 pt-4">
             <h6 class="mb-0 text-h6 text-typo">Profile Information</h6>
@@ -82,7 +105,7 @@
                   <v-list-item-content class="py-0">
                     <div class="text-body text-sm">
                       <strong class="text-dark">Full Name:</strong>
-                      &nbsp; Alec M. Thompson
+                      &nbsp; {{ this.user.firstName }} {{ this.user.lastName }}
                     </div>
                   </v-list-item-content>
                 </v-list-item>
@@ -90,7 +113,7 @@
                   <v-list-item-content class="py-0">
                     <div class="text-body text-sm">
                       <strong class="text-dark">Mobile:</strong>
-                      &nbsp; (44) 123 1234 123
+                      &nbsp;
                     </div>
                   </v-list-item-content>
                 </v-list-item>
@@ -98,7 +121,7 @@
                   <v-list-item-content class="py-0">
                     <div class="text-body text-sm">
                       <strong class="text-dark">Email:</strong>
-                      &nbsp; alecthompson@mail.com
+                      &nbsp; {{this.user.email }}
                     </div>
                   </v-list-item-content>
                 </v-list-item>
@@ -106,7 +129,7 @@
                   <v-list-item-content class="py-0">
                     <div class="text-body text-sm">
                       <strong class="text-dark">Location:</strong>
-                      &nbsp; USA
+                      &nbsp;
                     </div>
                   </v-list-item-content>
                 </v-list-item>
@@ -133,7 +156,7 @@
         </v-card>
         <hr class="vertical dark" />
       </v-col>
-      <v-col lg="4" cols="12">
+      <v-col lg="4" md="4" cols="4" class="position-relative">
         <v-card class="h-100">
           <div class="px-4 pt-4">
             <h6 class="mb-0 text-h6 text-typo">Conversations</h6>
@@ -264,6 +287,8 @@
   </v-container>
 </template>
 <script>
+import UserService from "@/services/user.service";
+
 export default {
   name: "Profile-Overview",
   data: function () {
@@ -425,7 +450,22 @@ export default {
           ],
         },
       ],
+      user: [],
     };
+  },
+  mounted() {
+    UserService.getProfile().then(
+      (response) => {
+        this.user = response.data;
+        this.user.photo = "http://localhost/uploads/avatars/" + this.user.photo;
+      },
+      (error) => {
+        this.content =
+          (error.response && error.response.data) ||
+          error.message ||
+          error.toString();
+      }
+    );
   },
 };
 </script>

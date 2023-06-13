@@ -662,7 +662,6 @@ export default {
       if (!type) return;
       switch (type) {
         case "Default":
-          console.log("aaaa");
           this.snackbar = {
             color: "#172b4d",
             visible: true,

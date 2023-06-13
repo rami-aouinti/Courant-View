@@ -379,7 +379,6 @@ export default {
         };
         EventService.addEvent(event).then(
           (response) => {
-            console.log(response.data);
             this.calendarOptions.events.push(JSON.parse(JSON.stringify(event)));
             this.SnackbarShow("Success");
           },

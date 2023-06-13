@@ -16,10 +16,6 @@ class ArticleService {
     return axios
       .put(API_URL + "post/" + i, post, { headers: authHeader() })
       .then((response) => {
-        if (response.data) {
-          console.log(response.data);
-        }
-
         return response.data;
       });
   }
@@ -32,9 +28,6 @@ class ArticleService {
     return axios
       .post(API_URL + "comment/" + i, event, { headers: authHeader() })
       .then((response) => {
-        if (response.data) {
-          console.log(response.data);
-        }
 
         return response.data;
       });
@@ -44,10 +37,6 @@ class ArticleService {
     return axios
       .post(API_URL + "event", event, { headers: authHeader() })
       .then((response) => {
-        if (response.data) {
-          console.log(response.data);
-        }
-
         return response.data;
       });
   }
@@ -58,10 +47,6 @@ class ArticleService {
     return axios
       .post(API_URL + "event", event, { headers: authHeader() })
       .then((response) => {
-        if (response.data) {
-          console.log(response.data);
-        }
-
         return response.data;
       });
   }
@@ -70,10 +55,6 @@ class ArticleService {
     return axios
       .post(API_URL + "event", event, { headers: authHeader() })
       .then((response) => {
-        if (response.data) {
-          console.log(response.data);
-        }
-
         return response.data;
       });
   }
@@ -82,10 +63,6 @@ class ArticleService {
     return axios
       .post(API_URL + "event", event, { headers: authHeader() })
       .then((response) => {
-        if (response.data) {
-          console.log(response.data);
-        }
-
         return response.data;
       });
   }
@@ -94,10 +71,6 @@ class ArticleService {
     return axios
       .post(API_URL + "event", event, { headers: authHeader() })
       .then((response) => {
-        if (response.data) {
-          console.log(response.data);
-        }
-
         return response.data;
       });
   }

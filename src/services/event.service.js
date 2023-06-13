@@ -16,10 +16,6 @@ class EventService {
     return axios
       .post(API_URL + "event", event, { headers: authHeader() })
       .then((response) => {
-        if (response.data) {
-          console.log(response.data);
-        }
-
         return response.data;
       });
   }
@@ -28,10 +24,6 @@ class EventService {
     return axios
       .put(API_URL + "event/" + event.id, event, { headers: authHeader() })
       .then((response) => {
-        if (response.data) {
-          console.log(response.data);
-        }
-
         return response.data;
       });
   }
@@ -40,10 +32,6 @@ class EventService {
     return axios
       .patch(API_URL + "event/" + event.id, event, { headers: authHeader() })
       .then((response) => {
-        if (response.data) {
-          console.log(response.data);
-        }
-
         return response.data;
       });
   }

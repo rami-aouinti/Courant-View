@@ -30,18 +30,18 @@
               mb-6
               text-decoration-none
             "
-            v-for="(message, i) in messages"
-            :key="message.name"
+            v-for="(message, i) in participants"
+            :key="message.username"
           >
             <div
               class="d-flex pa-4 bg-gradient-primary border-radius-xl"
               v-if="i == 0"
             >
               <v-avatar size="48">
-                <img :src="message.image" alt="Avatar" />
+                <img src="@/assets/img/team-2.jpg" alt="Avatar" />
               </v-avatar>
               <div class="ms-3">
-                <h6 class="text-h6 text-white mb-0">{{ message.name }}</h6>
+                <h6 class="text-h6 text-white mb-0">{{ message.username }}</h6>
                 <p
                   class="
                     mb-0
@@ -52,16 +52,34 @@
                     text-sm
                   "
                 >
-                  {{ message.message }}
+                  {{ message.firstName }}
                 </p>
               </div>
             </div>
             <div class="d-flex pa-4" v-else>
               <v-avatar size="48">
-                <img :src="message.image" alt="Avatar" />
+                <img src="@/assets/img/team-2.jpg" alt="Avatar" />
               </v-avatar>
+              <v-btn
+                elevation="0"
+                :ripple="false"
+                height="43"
+                class="
+                  font-weight-bold
+                  text-uppercase
+                  btn-primary
+                  bg-gradient-primary
+                  py-2
+                  px-6
+                  me-2
+                  text-xs
+                "
+                @click="showBasicAlert(message)"
+              >
+                Try me!</v-btn
+              >
               <div class="ms-3">
-                <h6 class="text-h6 text-typo mb-0">{{ message.name }}</h6>
+                <h6 class="text-h6 text-typo mb-0">{{ message.username }}</h6>
                 <p
                   class="text-muted text-xs mb-2 font-weight-light"
                   v-if="message.time"
@@ -356,7 +374,7 @@
           </div>
           <div class="py-4 px-4">
             <v-form
-              @submit.prevent="submit"
+              @submit.prevent="addMessage"
               class="d-flex w-100"
               id="navbar-search-main"
             >
@@ -369,10 +387,15 @@
                 color="#e91e63"
                 label="Type your message"
                 class="font-size-input input-style"
+                v-model="messageText"
               >
               </v-text-field>
               <v-btn elevation="0" class="bg-gradient-primary ms-2" height="40">
-                <v-icon class="material-icons-round text-white">send</v-icon>
+                <v-icon
+                  @submit.prevent="addMessage"
+                  class="material-icons-round text-white"
+                  >send</v-icon
+                >
               </v-btn>
             </v-form>
           </div>
@@ -381,11 +404,18 @@
     </v-row>
   </v-container>
 </template>
+
 <script>
+import ChatService from "@/services/chat.service";
+import AdminService from "@/services/admin.service";
+import MercureService from "@/services/mercure.service";
+import UserService from "@/services/user.service";
+
 export default {
   name: "Teams",
   data: function () {
     return {
+      messageText: "",
       messages: [
         {
           image: require("@/assets/img/team-2.jpg"),
@@ -420,28 +450,6 @@ export default {
       chats: [
         {
           type: "received",
-          message:
-            "Yeah! Responsive Design is geared towards those trying to build web apps",
-          time: "4:31pm",
-        },
-        {
-          type: "sent",
-          message: "Excellent, I want it now !",
-          time: "4:42pm",
-        },
-        {
-          type: "received",
-          message: "You can easily get it; The content here is all free",
-          time: "4:42pm",
-        },
-        {
-          type: "sent",
-          message:
-            "Awesome, blog is important source material for anyone who creates apps? Beacause these blogs offer a lot of information about website development.",
-          time: "4:42pm",
-        },
-        {
-          type: "received",
           image:
             "https://images.unsplash.com/photo-1547949003-9792a18a2601?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=80",
           time: "4:42pm",
@@ -452,11 +460,122 @@ export default {
             "At the end of the day … the native dev apps is where users are",
           time: "4:42pm",
         },
-        {
-          type: "received",
-          message: "Charlie is Typing...",
-        },
       ],
+      participants: [],
+      conversationId: "",
+      config: [],
+      user: [],
+    };
+  },
+  methods: {
+    addMessage() {
+      var messageSendArray = {
+        type: "sent",
+        message: this.messageText,
+        time: new Date(),
+      };
+      this.chats.push(messageSendArray);
+      var data = {
+        id: this.user.id,
+        username: this.user.username,
+        message: this.messageText,
+      };
+      MercureService.postChat(data);
+      ChatService.newMessage(this.conversationId, this.messageText).then(
+        (response) => {
+          console.log(response);
+          this.messageText = "";
+        },
+        (error) => {
+          this.content =
+            (error.response && error.response.data) ||
+            error.message ||
+            error.toString();
+        }
+      );
+      this.messageText = "";
+    },
+    showBasicAlert(user) {
+      ChatService.newConversation(user).then(
+        (response) => {
+          this.conversationId = response["id"];
+          ChatService.getMessages(this.conversationId).then(
+            (response) => {
+              console.log(response.data);
+            },
+            (error) => {
+              this.content =
+                (error.response && error.response.data) ||
+                error.message ||
+                error.toString();
+            }
+          );
+        },
+        (error) => {
+          this.content =
+            (error.response && error.response.data) ||
+            error.message ||
+            error.toString();
+        }
+      );
+    },
+    addTextSenderMessage(messageReceiverArray) {
+      this.chats.push(messageReceiverArray);
+    },
+  },
+  mounted: function () {
+    ChatService.getConversation().then(
+      (response) => {
+        console.log(response.data);
+        this.config = response.data[1].config;
+      },
+      (error) => {
+        this.content =
+          (error.response && error.response.data) ||
+          error.message ||
+          error.toString();
+      }
+    );
+    UserService.getProfile().then(
+      (response) => {
+        this.user = response.data;
+      },
+      (error) => {
+        this.content =
+          (error.response && error.response.data) ||
+          error.message ||
+          error.toString();
+      }
+    );
+    AdminService.getItems("user").then(
+      (response) => {
+        this.participants = response.data;
+      },
+      (error) => {
+        this.content =
+          (error.response && error.response.data) ||
+          error.message ||
+          error.toString();
+      }
+    );
+
+    const subscribeURL = new URL("http://localhost:9090/.well-known/mercure");
+    subscribeURL.searchParams.append("topic", "chat");
+
+    const es = new EventSource(subscribeURL);
+
+    es.onmessage = ({ data }) => {
+      const { message } = JSON.parse(data);
+      if (!message) throw new Error("Invalid payload");
+      const { id } = JSON.parse(data);
+      if (id !== this.user.id) {
+        var messageReceiverArray = {
+          type: "received",
+          message: message,
+          time: new Date(),
+        };
+        this.addTextSenderMessage(messageReceiverArray);
+      }
     };
   },
 };

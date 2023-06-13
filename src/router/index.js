@@ -222,11 +222,11 @@ let vrPages = {
 
 let profilePages = {
   path: "/",
-  component: ProfileLayout,
+  component: HomeLayout,
   name: "Profile",
   children: [
     {
-      path: "/pages/pages/profile/overview",
+      path: "profile/overview",
       name: "ProfileOverview",
       component: ProfileOverview,
       meta: {
@@ -234,7 +234,7 @@ let profilePages = {
       },
     },
     {
-      path: "/pages/pages/profile/messages",
+      path: "/messenger",
       name: "Messages",
       component: Messages,
       meta: {
@@ -278,11 +278,11 @@ let userPages = {
 
 let accountPages = {
   path: "/",
-  component: DashboardLayout,
+  component: HomeLayout,
   name: "Account",
   children: [
     {
-      path: "/pages/pages/account/settings",
+      path: "/account/settings",
       name: "Settings",
       component: Settings,
       meta: {
@@ -326,7 +326,7 @@ let projectsPages = {
 
 let applicationPages = {
   path: "/",
-  component: DashboardLayout,
+  component: HomeLayout,
   name: "Application",
   children: [
     {
@@ -354,7 +354,7 @@ let applicationPages = {
       },
     },
     {
-      path: "/pages/applications/calendar",
+      path: "/event",
       name: "Calendar",
       component: Calendar,
       meta: {

@@ -28,8 +28,9 @@
                 <v-list-item-group class="border-radius-sm">
                   <v-list-item
                     :ripple="false"
-                    v-for="conversation in conversations"
-                    :key="conversation.text"
+                    v-for="conversation in categories"
+                    :key="conversation.id"
+                    @click="addCategory(conversation.id)"
                     class="px-0 border-radius-sm mb-2"
                   >
                     <v-avatar
@@ -37,11 +38,9 @@
                       height="48"
                       class="shadow border-radius-lg me-4"
                     >
-                      <img
-                        :src="conversation.avatar"
-                        alt="Avatar"
-                        class="border-radius-lg"
-                      />
+                      <v-icon class="material-icons-round" size="36"
+                        >insights</v-icon
+                      >
                     </v-avatar>
                     <v-list-item-content>
                       <div class="d-flex align-center">
@@ -53,28 +52,8 @@
                               font-weight-bold
                             "
                           >
-                            {{ conversation.user }}
+                            {{ conversation.longname }}
                           </h6>
-                          <p class="mb-0 text-xs text-body font-weight-light">
-                            {{ conversation.message }}
-                          </p>
-                        </div>
-                        <div class="ms-auto">
-                          <v-btn
-                            :ripple="false"
-                            small
-                            text
-                            width="auto"
-                            class="
-                              pe-4
-                              ps-0
-                              mb-0
-                              text-primary
-                              font-weight-bolder
-                            "
-                          >
-                            Reply
-                          </v-btn>
                         </div>
                       </div>
                     </v-list-item-content>
@@ -126,7 +105,7 @@
                             me-2
                             text-xs
                           "
-                          @click="startQuizFunc()"
+                          @click="startQuizFunc(i)"
                         >
                           Level {{ i }}</v-btn
                         >
@@ -187,8 +166,8 @@
                 <v-list-item-group class="border-radius-sm">
                   <v-list-item
                     :ripple="false"
-                    v-for="conversation in conversations"
-                    :key="conversation.text"
+                    v-for="conversation in scores"
+                    :key="conversation.id"
                     class="px-0 border-radius-sm mb-2"
                   >
                     <v-avatar
@@ -197,7 +176,7 @@
                       class="shadow border-radius-lg me-4"
                     >
                       <img
-                        :src="conversation.avatar"
+                        :src="conversation.photo"
                         alt="Avatar"
                         class="border-radius-lg"
                       />
@@ -212,10 +191,10 @@
                               font-weight-bold
                             "
                           >
-                            {{ conversation.user }}
+                            {{ conversation.username }}
                           </h6>
                           <p class="mb-0 text-xs text-body font-weight-light">
-                            {{ conversation.message }}
+                            Level {{ conversation.level }}
                           </p>
                         </div>
                         <div class="ms-auto">
@@ -232,7 +211,7 @@
                               font-weight-bolder
                             "
                           >
-                            Reply
+                            {{ conversation.score }} points
                           </v-btn>
                         </div>
                       </div>
@@ -253,6 +232,9 @@
 </template>
 
 <script>
+import QuizService from "@/services/quiz.service";
+import AdminService from "@/services/admin.service";
+
 export default {
   data() {
     return {
@@ -396,77 +378,42 @@ export default {
       timer: null,
       startQuiz: false,
       startChoice: false,
-      questions: [
-        {
-          questionText: "Which one is used for two-way binding?",
-          answerOptions: [
-            { answerText: "v-on", isCorrect: false },
-            { answerText: "v-bind", isCorrect: false },
-            { answerText: "v-model", isCorrect: true },
-            { answerText: "v-if", isCorrect: false },
-          ],
-        },
-        {
-          questionText: "Who is the creator of vueJS ?",
-          answerOptions: [
-            { answerText: "Jeff Bezos", isCorrect: false },
-            { answerText: "Elon Musk", isCorrect: false },
-            { answerText: "Evan You", isCorrect: true },
-            { answerText: "Tony Stark", isCorrect: false },
-          ],
-        },
-        {
-          questionText: "Vue is used in the backend. - True or False?",
-          answerOptions: [
-            { answerText: "True", isCorrect: false },
-            { answerText: "False", isCorrect: true },
-          ],
-        },
-        {
-          questionText: "Which version of Vue is Launched on 2020?",
-          answerOptions: [
-            { answerText: "Vue 2", isCorrect: false },
-            { answerText: "Vue 1", isCorrect: false },
-            { answerText: "Vue 4", isCorrect: false },
-            { answerText: "Vue 3", isCorrect: true },
-          ],
-        },
-        {
-          questionText: "Is vue an OpenSource Library?",
-          answerOptions: [
-            { answerText: "True", isCorrect: true },
-            { answerText: "False", isCorrect: false },
-          ],
-        },
-        {
-          questionText:
-            "Which of the following is a Full Javascript Frramework",
-          answerOptions: [
-            { answerText: "Vue", isCorrect: false },
-            { answerText: "node", isCorrect: false },
-            { answerText: "react", isCorrect: false },
-            { answerText: "Angular", isCorrect: true },
-          ],
-        },
-        {
-          questionText: "Composition API can be used on which version?",
-          answerOptions: [
-            { answerText: "Vue 5", isCorrect: false },
-            { answerText: "Vue 2 Only", isCorrect: false },
-            { answerText: "Vue 3 Only", isCorrect: false },
-            { answerText: "Both Vue 2 and Vue 3", isCorrect: true },
-          ],
-        },
-      ],
+      questions: [],
+      result: [],
+      categories: [],
+      scores: [],
+      categoryId: "",
     };
   },
 
   methods: {
+    addCategory(i) {
+      this.categoryId = i;
+    },
     choiceLevel() {
       this.startChoice = true;
       this.startQuiz = true;
     },
-    startQuizFunc() {
+    startQuizFunc(i) {
+      QuizService.getQuestions(this.categoryId).then(
+        (response) => {
+          this.questions = response.data
+            .filter(checkAdult)
+            .sort(() => Math.random() - Math.random())
+            .slice(0, 10);
+        },
+        (error) => {
+          this.content =
+            (error.response && error.response.data) ||
+            error.message ||
+            error.toString();
+        }
+      );
+
+      function checkAdult(question) {
+        return question.complicated === i;
+      }
+
       this.startChoice = false;
       this.countDownTimer();
     },
@@ -484,6 +431,22 @@ export default {
         this.countDown = 30;
         this.countDownTimer();
       } else {
+        //save data
+        var scoreObject = {
+          score: this.score,
+          level: Math.round(this.score) - 1,
+        };
+        QuizService.addScore(scoreObject).then(
+          (response) => {
+            console.log(response.data);
+          },
+          (error) => {
+            this.content =
+              (error.response && error.response.data) ||
+              error.message ||
+              error.toString();
+          }
+        );
         // localStorage.removeItem('qattended')
         this.showScore = true;
         // localStorage.setItem('testComplete',this.showScore)
@@ -500,6 +463,31 @@ export default {
       }
     },
   },
+  mounted() {
+    AdminService.getItems("category").then(
+      (response) => {
+        this.categories = response.data;
+      },
+      (error) => {
+        this.content =
+          (error.response && error.response.data) ||
+          error.message ||
+          error.toString();
+      }
+    );
+    QuizService.getScores().then(
+      (response) => {
+        this.scores = response.data;
+      },
+      (error) => {
+        this.content =
+          (error.response && error.response.data) ||
+          error.message ||
+          error.toString();
+      }
+    );
+  },
+
   created() {
     //  alert(this.$store.state.questionAttended)
     //    this.showScore = localStorage.getItem('testComplete') || false

@@ -3,9 +3,41 @@ import authHeader from "./auth-header";
 
 const API_URL = "http://localhost/api/v1/";
 
-class QuizService {
-  getQuestions(category) {
-    return axios.get(API_URL + "application/questions/" + category, { headers: authHeader() });
+class ChatService {
+  getConversation() {
+    return axios.get(API_URL + "conversations", { headers: authHeader() });
+  }
+
+  newConversation(user) {
+    return axios
+      .post(
+        API_URL + "newConversations",
+        { otherUser: user },
+        {
+          headers: authHeader(),
+        }
+      )
+      .then((response) => {
+        return response.data;
+      });
+  }
+
+  getMessages(i) {
+    return axios.get(API_URL + "messages/" + i, { headers: authHeader() });
+  }
+
+  newMessage(i, content) {
+    return axios
+      .post(
+        API_URL + "newMessage/" + i,
+        { content: content },
+        {
+          headers: authHeader(),
+        }
+      )
+      .then((response) => {
+        return response.data;
+      });
   }
 
   getScores() {
@@ -36,4 +68,4 @@ class QuizService {
   }
 }
 
-export default new QuizService();
+export default new ChatService();
