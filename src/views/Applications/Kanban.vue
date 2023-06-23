@@ -50,8 +50,8 @@
           <kanban-board :stages="stages" :blocks="blocks">
             <div
               v-for="block in blocks"
-              :slot="block.id"
               :key="block.id"
+              :slot="block.id"
               class="pa-1"
             >
               <div v-if="block.image">
@@ -153,7 +153,7 @@ export default {
           name: "Milla",
         },
       ],
-      stages: ["Backlog", "In progress", "In review", "Done"],
+      stages: ["Backlog", "Progress", "In review", "Done"],
       blocks: [
         {
           id: 1,
@@ -191,7 +191,7 @@ export default {
         },
         {
           id: 4,
-          status: "In progress",
+          status: "Progress",
           title: "Fix Firefox errors",
           badge: "Errors",
           badgeColor: "warning",
@@ -209,7 +209,7 @@ export default {
         },
         {
           id: 5,
-          status: "In progress",
+          status: "Progress",
           title: "Fix Firefox errors",
           badge: "Updates",
           badgeColor: "info",
@@ -228,7 +228,7 @@ export default {
         {
           id: 6,
           image: require("@/assets/img/meeting.jpg"),
-          status: "In progress",
+          status: "Progress",
           title: "Vue 3 Updates",
           badge: "Updates",
           badgeColor: "info",

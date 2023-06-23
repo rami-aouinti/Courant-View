@@ -459,7 +459,6 @@
   </v-navigation-drawer>
 </template>
 <script>
-
 export default {
   name: "drawer",
   props: {
@@ -550,6 +549,18 @@ export default {
             ],
           },
           {
+            title: "Office Management",
+            prefix: "O",
+            active: false,
+            items: [
+              {
+                title: "Offices",
+                prefix: "U",
+                link: "/admin/office",
+              },
+            ],
+          },
+          {
             title: "Quiz Management",
             prefix: "Q",
             active: false,
@@ -624,6 +635,11 @@ export default {
             title: "Quiz",
             prefix: "Q",
             link: "/quiz",
+          },
+          {
+            title: "Project",
+            prefix: "P",
+            link: "/project",
           },
         ],
       },

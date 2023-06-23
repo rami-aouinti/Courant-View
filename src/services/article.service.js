@@ -5,11 +5,19 @@ const API_URL = "http://localhost/api/v1/";
 
 class ArticleService {
   getPosts() {
-    return axios.get(API_URL + "post", { headers: authHeader() });
+    return axios.get(API_URL + "article", { headers: authHeader() });
   }
 
   showPost(id) {
     return axios.get(API_URL + "post/" + id, { headers: authHeader() });
+  }
+
+  addPost(post) {
+    return axios
+      .post(API_URL + "article/new", post, { headers: authHeader() })
+      .then((response) => {
+        return response.data;
+      });
   }
 
   editPost(post, i) {
@@ -24,11 +32,16 @@ class ArticleService {
 
   showComments() {}
 
-  addComment(i) {
+  addComment(slug, comment) {
     return axios
-      .post(API_URL + "comment/" + i, event, { headers: authHeader() })
+      .post(
+        API_URL + "comment/" + slug + "/new",
+        { comment: comment },
+        {
+          headers: authHeader(),
+        }
+      )
       .then((response) => {
-
         return response.data;
       });
   }

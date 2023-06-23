@@ -480,7 +480,7 @@ export default {
         username: this.user.username,
         message: this.messageText,
       };
-      MercureService.postChat(data);
+      MercureService.postItem(data, "chat");
       ChatService.newMessage(this.conversationId, this.messageText).then(
         (response) => {
           console.log(response);

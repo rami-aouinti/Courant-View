@@ -154,6 +154,79 @@
           transition="slide-y-transition"
           offset-y
           offset-x
+          min-width="300"
+          max-width="300"
+        >
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              icon
+              :ripple="false"
+              :class="{ 'btn-dark-hover': !hasBg, 'btn-hover': hasBg }"
+              class="text-body"
+              :color="linkColor"
+              v-bind="attrs"
+              v-on="on"
+              @click="showNotified()"
+              small
+            >
+              <v-icon class="material-icons-round" size="20">
+                notifications
+              </v-icon>
+              <v-badge
+                v-if="countNotification > 0"
+                color="#f44335"
+                :content="countNotification"
+                offset-x="1"
+                offset-y="0"
+                class="position-absolute"
+                bordered
+              >
+              </v-badge>
+            </v-btn>
+          </template>
+
+          <v-list class="pa-3">
+            <v-list-item
+              v-for="(item, i) in user.notifications"
+              :key="i"
+              :to="item.path"
+              class="
+                pa-4
+                list-item-hover-active
+                d-flex
+                align-items-center
+                py-1
+                my-1
+                border-radius-md
+              "
+            >
+              <v-icon class="material-icons-round text-body" size="20">{{
+                item.type
+              }}</v-icon>
+
+              <v-list-item-content class="pa-0">
+                <v-list-item-title
+                  class="text-body-2 ls-0 text-typo font-weight-600 mb-0"
+                >
+                  <v-row>
+                    <v-col>
+                      <h6
+                        class="text-sm font-weight-normal ms-2 text-typo"
+                        v-html="item.name"
+                      >
+                        {{ item.name }}
+                      </h6>
+                    </v-col>
+                  </v-row>
+                </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
+        </v-menu>
+        <v-menu
+          transition="slide-y-transition"
+          offset-y
+          offset-x
           min-width="100"
           max-width="200"
         >
@@ -168,9 +241,16 @@
               v-on="on"
               small
             >
-              <v-avatar size="20" class="my-3 ms-2">
+              <v-avatar v-if="user.photo" size="20" class="my-3 ms-2">
                 <img :src="user.photo" alt="Brooklyn" />
               </v-avatar>
+              <Avatar
+                v-else
+                size="40"
+                class="my-3 ms-2"
+                :firstName="user.firstName"
+                :lastName="user.lastName"
+              />
             </v-btn>
           </template>
 
@@ -188,76 +268,6 @@
                 border-radius-md
               "
               :to="item.link"
-            >
-              <v-icon class="material-icons-round text-body" size="20">{{
-                item.icon
-              }}</v-icon>
-
-              <v-list-item-content class="pa-0">
-                <v-list-item-title
-                  class="text-body-2 ls-0 text-typo font-weight-600 mb-0"
-                >
-                  <v-row>
-                    <v-col>
-                      <h6
-                        class="text-sm font-weight-normal ms-2 text-typo"
-                        v-html="item.title"
-                      >
-                        {{ item.title }}
-                      </h6>
-                    </v-col>
-                  </v-row>
-                </v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-          </v-list>
-        </v-menu>
-        <v-menu
-          transition="slide-y-transition"
-          offset-y
-          offset-x
-          min-width="300"
-          max-width="300"
-        >
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn
-              icon
-              :ripple="false"
-              :class="{ 'btn-dark-hover': !hasBg, 'btn-hover': hasBg }"
-              class="text-body"
-              :color="linkColor"
-              v-bind="attrs"
-              v-on="on"
-              small
-            >
-              <v-icon class="material-icons-round" size="20">
-                notifications
-              </v-icon>
-              <v-badge
-                color="#f44335"
-                content="11"
-                offset-x="1"
-                offset-y="0"
-                class="position-absolute"
-                bordered
-              >
-              </v-badge>
-            </v-btn>
-          </template>
-
-          <v-list class="pa-3">
-            <v-list-item
-              v-for="(item, i) in dropdown"
-              :key="i"
-              class="
-                pa-4
-                list-item-hover-active
-                d-flex
-                align-items-center
-                py-1
-                my-1
-                border-radius-md
-              "
             >
               <v-icon class="material-icons-round text-body" size="20">{{
                 item.icon
@@ -314,8 +324,13 @@
   </v-app-bar>
 </template>
 <script>
+import Avatar from "@/views/Avatar.vue";
+import UserService from "@/services/user.service";
+import NotificationService from "@/services/notification.service";
+
 export default {
   name: "app-bar",
+  components: { Avatar },
   props: {
     background: String,
     hasBg: Boolean,
@@ -325,7 +340,6 @@ export default {
       type: Boolean,
       default: false,
     },
-    user: [],
   },
   data() {
     return {
@@ -334,22 +348,7 @@ export default {
       loginPath: "/login",
       messengerPath: "/messenger",
       eventPath: "/event",
-      dropdown: [
-        {
-          icon: "email",
-          title: "Check new messages",
-          link: "/messages",
-        },
-        {
-          icon: "podcasts",
-          title: "Manage podcast session",
-          link: "",
-        },
-        {
-          icon: "shopping_cart",
-          title: "Payment successfully completed",
-        },
-      ],
+      dropdown: [],
       account: [
         {
           icon: "person",
@@ -367,6 +366,8 @@ export default {
           link: "/messages",
         },
       ],
+      user: [],
+      countNotification: 0,
     };
   },
   methods: {
@@ -385,11 +386,47 @@ export default {
         body.classList.add("drawer-mini");
       }
     },
+    showNotified() {
+      if (this.countNotification > 0) {
+        NotificationService.readNotification().then(
+          (response) => {
+            console.log(response);
+          },
+          (error) => {
+            this.content =
+              (error.response && error.response.data) ||
+              error.message ||
+              error.toString();
+          }
+        );
+        this.countNotification = 0;
+      }
+    },
+    countNotif(notification) {
+      return notification.filter(this.checkAdult).length;
+    },
+    checkAdult(notification) {
+      return notification.readNotification === false;
+    },
   },
   watch: {
     toggleActive(val) {
       this.togglerActive = val;
     },
+  },
+  mounted() {
+    UserService.getProfile().then(
+      (response) => {
+        this.user = response.data;
+        this.countNotification = this.countNotif(response.data.notifications);
+      },
+      (error) => {
+        this.content =
+          (error.response && error.response.data) ||
+          error.message ||
+          error.toString();
+      }
+    );
   },
 };
 </script>

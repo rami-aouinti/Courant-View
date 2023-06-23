@@ -80,6 +80,12 @@
 // /* eslint-disable no-new */
 import PerfectScrollbar from "perfect-scrollbar";
 import "perfect-scrollbar/css/perfect-scrollbar.css";
+import { FadeTransition } from "vue2-transitions";
+import Drawer from "@/views/Home/Layout/components/Drawer.vue";
+import AppBar from "@/views/Home/Layout/components/AppBar.vue";
+import ContentFooter from "@/views/Home/Layout/components/Footer.vue";
+import SettingsDrawer from "@/views/Home/Layout/components/SettingsDrawer.vue";
+import UserService from "@/services/user.service";
 
 function hasElement(className) {
   return document.getElementsByClassName(className).length > 0;
@@ -95,13 +101,6 @@ function initScrollbar(className) {
     }, 100);
   }
 }
-
-import { FadeTransition } from "vue2-transitions";
-import Drawer from "@/views/Home/Layout/components/Drawer.vue";
-import AppBar from "@/views/Home/Layout/components/AppBar.vue";
-import ContentFooter from "@/views/Home/Layout/components/Footer.vue";
-import SettingsDrawer from "@/views/Home/Layout/components/SettingsDrawer.vue";
-import UserService from "@/services/user.service";
 
 export default {
   components: {

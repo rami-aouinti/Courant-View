@@ -17,18 +17,26 @@
     >
       <v-row>
         <v-col cols="auto">
-          <v-avatar width="74" height="74" class="shadow border-radius-lg">
-            <img
-              src="@/assets/img/bruce-mars.jpg"
-              alt="Avatar"
-              class="border-radius-lg"
-            />
+          <v-avatar
+            v-if="this.user.photo"
+            width="74"
+            height="74"
+            class="shadow border-radius-lg"
+          >
+            <img :src="this.user.photo" alt="Avatar" class="border-radius-lg" />
           </v-avatar>
+          <Avatar
+            v-else
+            width="74"
+            height="74"
+            class="shadow border-radius-lg"
+            v-bind:initials="this.user.firstName + this.user.lastName"
+          />
         </v-col>
         <v-col cols="auto" class="my-auto">
           <div class="h-100">
             <h5 class="mb-1 text-h5 text-typo font-weight-bold">
-              Richard Devis
+              {{ this.user.firstName }} {{ this.user.lastName }}
             </h5>
             <p class="mb-0 font-weight-light text-body text-sm">
               CEO / Co-Founder
@@ -178,28 +186,7 @@
           <v-card class="overflow-scroll">
             <div class="py-4 d-flex">
               <v-col lg="1" md="2" sm="3" cols="4" class="text-center">
-                <v-avatar size="58" class="shadow-sm">
-                  <v-icon class="material-icons-round">add</v-icon>
-                </v-avatar>
-                <p class="mb-0 text-sm text-body font-weight-light mt-2">
-                  Add story
-                </p>
-              </v-col>
-              <v-col
-                v-for="avatar in stories"
-                :key="avatar.user"
-                lg="1"
-                md="2"
-                sm="3"
-                cols="4"
-                class="text-center"
-              >
-                <v-avatar size="58" class="border border-primary px-1 py-1">
-                  <v-img :src="avatar.image" width="50" height="50"> </v-img>
-                </v-avatar>
-                <p class="mb-0 text-sm text-body font-weight-light mt-2">
-                  {{ avatar.user }}
-                </p>
+                <ArticleCreate></ArticleCreate>
               </v-col>
             </div>
           </v-card>
@@ -207,226 +194,7 @@
       </v-row>
       <v-row>
         <v-col lg="8" cols="12">
-          <div v-for="post in posts">
-            <v-card>
-              <div class="border-bottom d-flex align-center px-4 py-4">
-                <div class="d-flex align-center">
-                  <a href="javascript:;" class="text-decoration-none">
-                    <v-avatar size="48" class="rounded-circle">
-                      <v-img
-                        src="@/assets/img/team-4.jpg"
-                        alt="profile-image"
-                      ></v-img>
-                    </v-avatar>
-                  </a>
-                  <div class="mx-4">
-                    <a
-                      href="javascript:;"
-                      class="
-                        text-dark
-                        font-weight-600
-                        text-sm text-decoration-none
-                      "
-                      >John Snow</a
-                    >
-                    <small class="d-block text-muted">3 days ago</small>
-                  </div>
-                </div>
-                <div class="text-end ms-auto">
-                  <v-btn
-                    outlined
-                    color="#fff"
-                    class="font-weight-bolder bg-gradient-primary py-4 px-7"
-                    small
-                  >
-                    <v-icon size="8" class="material-icons-round pe-2"
-                      >add</v-icon
-                    >
-                    Follow
-                  </v-btn>
-                </div>
-              </div>
-              <div class="px-4 py-4">
-                <v-list-item :to="{ path: '/post', query: { id: post.id } }">
-                  <h3>{{ post.title }}</h3>
-                </v-list-item>
-
-                <p class="mb-6 text-body font-weight-light">
-                  {{ post.summary }}
-                </p>
-                <v-img
-                  src="https://images.unsplash.com/photo-1578271887552-5ac3a72752bc?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1950&q=80"
-                  class="border-radius-lg shadow-lg"
-                >
-                </v-img>
-                <v-row class="align-center px-2 mt-6 mb-2">
-                  <v-col sm="6">
-                    <div class="d-flex">
-                      <div class="d-flex align-center">
-                        <v-icon
-                          size="14"
-                          class="
-                            material-icons-round
-                            me-1
-                            text-body
-                            cursor-pointer
-                          "
-                          >thumb_up</v-icon
-                        >
-                        <span class="text-sm text-body me-4">150</span>
-                      </div>
-                      <div class="d-flex align-center">
-                        <v-icon
-                          size="14"
-                          class="
-                            material-icons-round
-                            me-1
-                            text-body
-                            cursor-pointer
-                          "
-                          >mode_comment</v-icon
-                        >
-                        <span class="text-sm text-body me-4">36</span>
-                      </div>
-                      <div class="d-flex align-center">
-                        <v-icon
-                          size="14"
-                          class="
-                            material-icons-round
-                            me-1
-                            text-body
-                            cursor-pointer
-                          "
-                          >forward</v-icon
-                        >
-                        <span class="text-sm text-body me-4">12</span>
-                      </div>
-                    </div>
-                  </v-col>
-                  <v-col sm="6">
-                    <div class="d-flex align-center">
-                      <div class="d-flex align-items-center ms-auto">
-                        <v-avatar size="24" class="border border-white ms-n2">
-                          <img src="@/assets/img/team-5.jpg" alt="Avatar" />
-                        </v-avatar>
-                        <v-avatar size="24" class="border border-white ms-n2">
-                          <img src="@/assets/img/team-2.jpg" alt="Avatar" />
-                        </v-avatar>
-                        <v-avatar size="24" class="border border-white ms-n2">
-                          <img src="@/assets/img/team-1.jpg" alt="Avatar" />
-                        </v-avatar>
-                      </div>
-                      <small class="ps-2 font-weight-bold text-body text-sm"
-                        >and 30+ more</small
-                      >
-                    </div>
-                  </v-col>
-                </v-row>
-                <div class="mb-1">
-                  <hr class="horizontal dark mt-1 mb-5" />
-                  <div class="d-flex">
-                    <div class="flex-shrink-0">
-                      <v-avatar>
-                        <v-img src="@/assets/img/bruce-mars.jpg"></v-img>
-                      </v-avatar>
-                    </div>
-                    <div class="flex-grow-1 ms-4">
-                      <h5 class="text-h5 text-typo font-weight-bold mt-0 mb-2">
-                        Michael Lewis
-                      </h5>
-                      <p class="text-sm font-weight-light text-body">
-                        I always felt like I could do anything. That’s the main
-                        thing people are controlled by! Thoughts- their
-                        perception of themselves!
-                      </p>
-                      <div class="d-flex align-center">
-                        <v-icon
-                          size="14"
-                          class="
-                            material-icons-round
-                            me-1
-                            text-body
-                            cursor-pointer
-                          "
-                          >thumb_up</v-icon
-                        >
-                        <span class="text-sm me-2 text-body">3 likes</span>
-                        <v-icon
-                          size="14"
-                          class="
-                            material-icons-round
-                            me-1
-                            text-body
-                            cursor-pointer
-                          "
-                          >share</v-icon
-                        >
-                        <span class="text-sm me-2 text-body">2 shares</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="d-flex mt-5">
-                    <div class="flex-shrink-0">
-                      <v-avatar>
-                        <v-img src="@/assets/img/team-5.jpg"></v-img>
-                      </v-avatar>
-                    </div>
-                    <div class="flex-grow-1 ms-4">
-                      <h5 class="text-h5 text-typo font-weight-bold mt-0 mb-2">
-                        Jessica Stones
-                      </h5>
-                      <p class="text-sm font-weight-light text-body">
-                        Society has put up so many boundaries, so many
-                        limitations on what’s right and wrong that it’s almost
-                        impossible to get a pure thought out. It’s like a little
-                        kid, a little boy.
-                      </p>
-                      <div class="d-flex align-center">
-                        <v-icon
-                          size="14"
-                          class="
-                            material-icons-round
-                            me-1
-                            text-body
-                            cursor-pointer
-                          "
-                          >thumb_up</v-icon
-                        >
-                        <span class="text-sm me-2 text-body">10 likes</span>
-                        <v-icon
-                          size="14"
-                          class="
-                            material-icons-round
-                            me-1
-                            text-body
-                            cursor-pointer
-                          "
-                          >share</v-icon
-                        >
-                        <span class="text-sm me-2 text-body">1 share</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="d-flex mt-6">
-                    <div class="flex-shrink-0">
-                      <v-avatar>
-                        <v-img src="@/assets/img/team-4.jpg"></v-img>
-                      </v-avatar>
-                    </div>
-                    <div class="flex-grow-1 ms-4">
-                      <v-textarea
-                        placeholder="Write your comment"
-                        class="input-style mt-0 pt-0"
-                        color="#e91e63"
-                      ></v-textarea>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </v-card>
-          </div>
+          <article-list></article-list>
         </v-col>
         <v-col lg="4" cols="12">
           <v-card class="mb-6" v-for="card in cards" :key="card.title">
@@ -669,8 +437,18 @@
 
 <script>
 import ArticleService from "@/services/article.service";
+import UserService from "@/services/user.service";
+import Avatar from "./../Avatar.vue";
+import ArticleList from "@/views/Article/List.vue";
+import ArticleCreate from "@/views/Article/Add.vue";
+
 export default {
   name: "Home",
+  components: {
+    Avatar,
+    ArticleList,
+    ArticleCreate,
+  },
   data() {
     return {
       stories: [
@@ -825,6 +603,7 @@ export default {
         },
       ],
       posts: [],
+      user: [],
     };
   },
   computed: {
@@ -836,6 +615,18 @@ export default {
     if (!this.currentUser) {
       this.$router.push("/login");
     }
+    UserService.getProfile().then(
+      (response) => {
+        this.user = response.data;
+        this.user.photo = "http://localhost/uploads/avatars/" + this.user.photo;
+      },
+      (error) => {
+        this.content =
+          (error.response && error.response.data) ||
+          error.message ||
+          error.toString();
+      }
+    );
     ArticleService.getPosts().then(
       (response) => {
         this.posts = response.data.slice(0, 10);

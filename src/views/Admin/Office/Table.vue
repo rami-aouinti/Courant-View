@@ -74,79 +74,10 @@
                       px-6
                       ms-3
                     "
-                    >New {{ modelItem.name }}</v-btn
+                    >New Office</v-btn
                   >
                 </template>
-                <v-card class="card-shadow border-radius-xl">
-                  <div class="card-header-padding card-border-bottom">
-                    <span class="font-weight-bold text-h5 text-typo mb-0">{{
-                      formTitle
-                    }}</span>
-                  </div>
-                  <v-card-text class="card-padding">
-                    <v-container class="px-0">
-                      <v-row>
-                        <template v-for="(feld, index) in defaultItem">
-                          <v-col cols="6">
-                            <v-text-field
-                              v-model="editedItem[index]"
-                              hide-details
-                              class="
-                                input-style
-                                font-size-input
-                                text-light-input
-                                placeholder-light
-                                input-icon
-                              "
-                              dense
-                              flat
-                              filled
-                              solo
-                              height="43"
-                              :placeholder="
-                                index.charAt(0).toUpperCase() + index.slice(1)
-                              "
-                            ></v-text-field>
-                          </v-col>
-                        </template>
-                      </v-row>
-                    </v-container>
-                  </v-card-text>
-
-                  <v-card-actions class="card-padding d-flex justify-end">
-                    <v-btn
-                      @click="close"
-                      elevation="0"
-                      :ripple="false"
-                      height="43"
-                      class="
-                        font-weight-normal
-                        text-capitalize
-                        btn-ls btn-outline-secondary
-                        bg-transparent
-                        py-3
-                        px-6
-                      "
-                      >Cancel</v-btn
-                    >
-
-                    <v-btn
-                      @click="save"
-                      elevation="0"
-                      :ripple="false"
-                      height="43"
-                      class="
-                        font-weight-normal
-                        text-capitalize
-                        btn-ls btn-primary
-                        bg-gradient-primary
-                        py-3
-                        px-6
-                      "
-                      >Save</v-btn
-                    >
-                  </v-card-actions>
-                </v-card>
+                <FielUser></FielUser>
               </v-dialog>
 
               <v-dialog v-model="dialogDelete" max-width="500px">
@@ -297,7 +228,7 @@
 </template>
 <script>
 import AdminService from "@/services/admin.service";
-
+import FielUser from "./User.vue";
 export default {
   name: "paginated-tables",
   props: {
@@ -306,6 +237,9 @@ export default {
     formObject: String,
     formPath: String,
     modelItem: [],
+  },
+  components: {
+    FielUser,
   },
   data() {
     return {
@@ -430,7 +364,6 @@ export default {
         }
 
         for (let [index, val] of listOfFeld.entries()) {
-          console.log(index);
           this.defaultItem[val] = "";
           this.editedItem[val] = "";
           this.headers.push({

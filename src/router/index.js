@@ -2,7 +2,6 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import DashboardLayout from "../views/Layout/DashboardLayout.vue";
 import HomeLayout from "../views/Home/Layout/DashboardLayout.vue";
-import ProfileLayout from "../views/Layout/ProfileLayout.vue";
 import DashboardLayoutVr from "../views/Layout/DashboardLayoutVr.vue";
 import PageLayout from "../views/Layout/PageLayout";
 import AuthBasicLayout from "../views/Layout/AuthBasicLayout";
@@ -27,8 +26,10 @@ const GettingStarted = () => import("../views/Dashboard/GettingStarted.vue");
 
 const Quiz = () => import("../views/Quiz/Quiz.vue");
 const QuizManagement = () => import("../views/Admin/Quiz/List.vue");
-const ConfigurationManagement = () => import("../views/Admin/Quiz/Configuration.vue");
+const ConfigurationManagement = () =>
+  import("../views/Admin/Quiz/Configuration.vue");
 const CategoryManagement = () => import("../views/Admin/Quiz/Category.vue");
+const OfficeManagement = () => import("../views/Admin/Office/List.vue");
 const AnswerManagement = () => import("../views/Admin/Quiz/Answer.vue");
 const QuestionManagement = () => import("../views/Admin/Quiz/Question.vue");
 const GroupManagement = () => import("../views/Admin/Quiz/Group.vue");
@@ -49,6 +50,10 @@ const Messages = () =>
   import(/* webpackChunkName: "pages" */ "@/views/Pages/Profile/Messages.vue");
 const Projects = () =>
   import(/* webpackChunkName: "pages" */ "@/views/Pages/Profile/Projects.vue");
+
+const Project = () =>
+  import(/* webpackChunkName: "pages" */ "@/views/Project/Projects.vue");
+
 const Reports = () =>
   import(/* webpackChunkName: "pages" */ "@/views/Pages/Users/Reports.vue");
 const NewUser = () =>
@@ -112,6 +117,10 @@ const OrderDetails = () =>
     /* webpackChunkName: "pages" */ "@/views/Ecommerce/Orders/OrderDetails.vue"
   );
 
+const ProjectDetails = () =>
+    import(
+        /* webpackChunkName: "pages" */ "@/views/Project/ProjectDetails.vue"
+        );
 const Login = () => import("@/views/Authentication/Login.vue");
 
 Vue.use(VueRouter);
@@ -133,6 +142,14 @@ let adminPages = {
       path: "/admin/groups",
       name: "User Group Management",
       component: UserGroupManagement,
+      meta: {
+        groupName: "Admin",
+      },
+    },
+    {
+      path: "/admin/office",
+      name: "Office Management",
+      component: OfficeManagement,
       meta: {
         groupName: "Admin",
       },
@@ -468,6 +485,32 @@ let quiz = {
   ],
 };
 
+let project = {
+  path: "/project",
+  component: HomeLayout,
+  name: "Project",
+  children: [
+    {
+      path: "/project",
+      name: "Project",
+      component: Project,
+    },
+  ],
+};
+
+let projectDetails = {
+  path: "/project/view",
+  component: HomeLayout,
+  name: "Project Detail",
+  children: [
+    {
+      path: "/project/view/:id",
+      name: "Project/Detail",
+      component: ProjectDetails,
+    },
+  ],
+};
+
 const routes = [
   home,
   adminPages,
@@ -648,6 +691,8 @@ const routes = [
   login,
   post,
   quiz,
+  project,
+  projectDetails,
 ];
 
 const router = new VueRouter({

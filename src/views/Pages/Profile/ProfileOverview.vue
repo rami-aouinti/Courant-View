@@ -5,7 +5,7 @@
         <v-tabs background-color="transparent" class="text-left">
           <v-tabs-slider></v-tabs-slider>
 
-          <v-tab :ripple="false" href="#tab-1">
+          <v-tab :ripple="false" @click="generateResume">
             <span class="ms-1">Messages</span>
           </v-tab>
 
@@ -93,10 +93,10 @@
           </div>
           <div class="px-4 py-4">
             <p class="text-sm font-weight-light text-body">
-              Hi, I’m Alec Thompson, Decisions: If you can’t decide, the answer
-              is no. If two equally difficult paths, choose the one more painful
-              in the short term (pain avoidance is creating an illusion of
-              equality).
+              Hi, I’m {{ this.user.firstName }} {{ this.user.lastName }},
+              Decisions: If you can’t decide, the answer is no. If two equally
+              difficult paths, choose the one more painful in the short term
+              (pain avoidance is creating an illusion of equality).
             </p>
             <hr class="horizontal dark mt-6 mb-3" />
             <v-list>
@@ -121,7 +121,7 @@
                   <v-list-item-content class="py-0">
                     <div class="text-body text-sm">
                       <strong class="text-dark">Email:</strong>
-                      &nbsp; {{this.user.email }}
+                      &nbsp; {{ this.user.email }}
                     </div>
                   </v-list-item-content>
                 </v-list-item>
@@ -149,6 +149,11 @@
                       >
                     </div>
                   </v-list-item-content>
+                </v-list-item>
+                <v-list-item>
+                  <v-btn class="ma-2" outlined @click="downloadFile" download
+                    >Download</v-btn
+                  >
                 </v-list-item>
               </v-list-item-group>
             </v-list>
@@ -288,6 +293,7 @@
 </template>
 <script>
 import UserService from "@/services/user.service";
+import ResumeService from "@/services/resume.service";
 
 export default {
   name: "Profile-Overview",
@@ -452,6 +458,28 @@ export default {
       ],
       user: [],
     };
+  },
+  methods: {
+    downloadFile() {
+      const fileUrl = "http://localhost/pdf/test.pdf";
+      const fileName = "test.pdf";
+      const win = window.open(fileUrl);
+      win.document.title = fileName;
+      win.document.execCommand("SaveAs", true, fileName);
+    },
+    generateResume() {
+      ResumeService.generateResume().then(
+        (response) => {
+          console.log(response);
+        },
+        (error) => {
+          this.content =
+            (error.response && error.response.data) ||
+            error.message ||
+            error.toString();
+        }
+      );
+    },
   },
   mounted() {
     UserService.getProfile().then(
